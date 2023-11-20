@@ -4,10 +4,13 @@ import {
 createBrowserRouter,
 RouterProvider,
 } from "react-router-dom";
+import { createHead } from 'unhead';
 import App from './App.tsx';
 import ErrorPage from './error-page';
 import './index.css';
 import IndexPage from './pages/Index';
+
+createHead()
 
 const router = createBrowserRouter([
   {
