@@ -13,7 +13,7 @@ function HomeLayout({ children }: Props) {
     <>
       <div className='relative h-screen w-screen border border-[#1E2D3D] bg-[#011627]'>
         <Header />
-        <div className='fixed inset-y-[48px] left-0 w-full overflow-y-auto'>
+        <div className='fixed bottom-0 left-0 top-[48px] w-full overflow-auto md:bottom-[48px]'>
           {children}
         </div>
         <Footer />
