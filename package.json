@@ -1,7 +1,7 @@
 {
-  "name": "portfolio-react",
+  "name": "cedrouseroll-portfolio-react",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-three/drei": "^9.88.17",
+    "@react-three/fiber": "^8.15.11",
     "clsx": "^2.0.0",
     "gsap": "^3.12.2",
     "localforage": "^1.10.0",
@@ -20,12 +22,14 @@
     "react-use": "^17.4.0",
     "sort-by": "^1.2.0",
     "styled-components": "^6.1.1",
+    "three": "^0.158.0",
     "unhead": "^1.8.4",
     "zustand": "^4.4.6"
   },
   "devDependencies": {
     "@egoist/tailwindcss-icons": "^1.4.0",
     "@iconify-json/carbon": "^1.1.21",
+    "@iconify-json/logos": "^1.1.38",
     "@types/node": "^20.9.2",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
