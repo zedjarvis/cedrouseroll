@@ -92,7 +92,7 @@ onUnmounted(() => {
     </header>
 
     <!-- Main -->
-    <main class="w-full flex flex-col gap-10">
+    <main class="w-full flex flex-col gap-10 pb-16">
       <section
         id="intro"
         class="max-w-2xl mx-auto px-4 flex flex-col items-start gap-6 w-full"
@@ -166,62 +166,47 @@ onUnmounted(() => {
         <div id="email-shortcut">
           <p class="text-[#8f8f8f]">
             Press
-            <Button variant="outline" size="sm" class="h-6 w-5">
+            <Button
+              variant="outline"
+              size="sm"
+              class="h-6 w-5"
+              @click="copy(email)"
+            >
               <kbd>C</kbd>
             </Button>
             to copy my email
           </p>
         </div>
       </section>
-      <section
-        id="work"
-        class="flex flex-col gap-4 w-full h-min scroll-mt-6 relative justify-center items-center"
-      >
-        <div
-          class="flex flex-col items-start gap-6 mx-auto w-full max-w-2xl px-4 relative h-min"
-        >
-          <div
-            class="flex flex-col content-start items-start gap-4 w-full h-min relative"
-          >
-            <div class="flex-none whitespace-pre">
-              <p class="font-geist text-xs text-[#8f8f8f]">WORK</p>
-            </div>
-            <div class="contents">
-              <p class="text-[#8f8f8f] tracking-wide leading-6">
-                Below are some select projects, full walkthrough on request
-              </p>
-            </div>
-          </div>
-        </div>
-        <div id="canvas" class="w-full h-135 relative">
-          <div class="contents">
-            <div
-              class="absolute border bg-green-500 h-full top-0 left-0 right-0"
-            >
-              <div class="h-full w-full opacity-100 relative">
-                <div class="opacity-20 absolute inset-0 overflow-hidden">
-                  <div
-                    class="absolute top-0 right-0 bottom-0 left-0 bg-repeat bg-center bg-size-[150px_auto] bg-[url(/images/dot-bg.svg)]"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div
-            class="absolute top-1/2 left-1/2 min-w-[253.25px] max-w-[275px] min-h-[93.5px] border -translate-x-1/2 -translate-y-1/2 overflow-visible"
-          >
-            <div class="contents relative w-full h-full">
-              <div
-                class="will-change-transform transform-none opacity-100 z-4 w-75 h-62 absolute bottom-2.25 left-176.5"
-              >
-                <div class="h-full w-full rotate-[4deg] rounded-[12px]">
-                  <NuxtImg src="/images/sb.jpg" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+
+      <!-- 👉 PROJECTS -->
+      <ClientOnly>
+        <WorkSection />
+      </ClientOnly>
+
+      <!-- 👉 EXPERIENCE -->
+      <ExperienceSection />
+
+      <!-- 👉 TESTIMONIALS -->
+      <TestimonialSection />
+
+      <!-- 👉 STACK -->
+      <StackSection />
+
+      <!-- 👉 VENTURES -->
+      <VentureSection />
+
+      <!-- 👉 WRITING -->
+      <WritingSection />
+
+      <!-- 👉 PERSONAL -->
+      <PersonalSection />
+
+      <!-- 👉 CONTACT -->
+      <ContactSection />
     </main>
+
+    <!-- 👉 FOOTER -->
+    <CustomFooter />
   </div>
 </template>
