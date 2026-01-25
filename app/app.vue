@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import "vue-sonner/style.css";
 import { Toaster } from "@/components/ui/sonner";
+import "vue-sonner/style.css";
 
 const colorMode = useColorMode();
 
 onMounted(() => {
-  console.log("CURRENT THEME: ", colorMode.value);
   colorMode.preference = "dark";
 });
 </script>
