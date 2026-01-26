@@ -3,6 +3,13 @@ import { Clock } from "lucide-vue-next";
 import { toast } from "vue-sonner";
 import { Button } from "~/components/ui/button";
 
+definePageMeta({
+  name: "Index",
+});
+
+useSeoMeta({
+  title: "Cedrouseroll Omondi - Software Engineer",
+});
 // copy email
 const email = ref("omondicedo@gmail.com");
 const { copy, copied, isSupported } = useClipboard({ source: email });
@@ -79,7 +86,12 @@ onUnmounted(() => {
     <header
       class="flex w-full justify-between items-center max-w-2xl py-10 px-4"
     >
-      <div class="flex gap-2">
+      <div class="flex items-center gap-2">
+        <NuxtImg
+          src="/images/signature.svg"
+          class="h-7"
+          alt="Ced's Signature Logo"
+        />
         <p class="text-xs font-medium font-geist">EST. 2000</p>
       </div>
 
@@ -140,7 +152,7 @@ onUnmounted(() => {
 
         <div class="contents">
           <p class="text-[#8f8f8f] tracking-wide leading-6">
-            Hey, I'm Ced, a lead engineer at
+            Hey, I'm Ced, a lead Developer at
             <LinkPreview url="https://www.schoolbooks.ke">
               <span class="text-foreground">Schoolbooks </span>
               <span
