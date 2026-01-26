@@ -36,7 +36,7 @@ const isMobile = breakpoints.smaller("sm"); // < 640px
     </div>
     <div
       id="canvas"
-      class="w-full h-135 relative flex items-center justify-center overflow-hidden"
+      class="w-full py-10 md:py-0 h-min md:h-135 relative flex items-center justify-center overflow-hidden"
     >
       <!-- Dotted background -->
       <div
@@ -65,13 +65,15 @@ const isMobile = breakpoints.smaller("sm"); // < 640px
 
       <!-- Images scattered -->
       <div class="contents">
-        <div class="relative w-full h-94 md:max-w-275">
+        <div
+          class="relative flex flex-col items-center gap-6 md:block w-full h-min md:h-94 md:max-w-275"
+        >
           <!-- Image 1 -->
           <div
-            class="group absolute will-change-transform transform-none opacity-100 w-80 h-62 z-1 hover:z-10 hover:scale-[1.08] transition-all duration-300 ease-out top-2.75 left-2.25"
+            class="group md:absolute will-change-transform transform-none opacity-100 w-80 h-62 md:z-1 md:hover:z-10 hover:scale-[1.08] transition-all duration-300 ease-out md:top-2.75 md:left-2.25"
           >
             <div
-              class="relative bg-white border-white border-4 border-solid w-full h-full rotate-[-4deg] group-hover:rotate-0 transition-transform duration-300 ease-out shadow-md rounded-lg overflow-hidden p-1"
+              class="relative bg-white border-white border-4 border-solid w-full h-full md:rotate-[-4deg] md:group-hover:rotate-0 transition-transform duration-300 ease-out shadow-md rounded-lg overflow-hidden p-1"
             >
               <div class="absolute inset-0">
                 <NuxtImg
@@ -85,10 +87,10 @@ const isMobile = breakpoints.smaller("sm"); // < 640px
 
           <!-- Image 2 -->
           <div
-            class="group absolute will-change-transform transform-none opacity-100 w-80 h-62 z-4 hover:z-10 hover:scale-[1.08] transition-all duration-300 ease-out bottom-2.75 left-60.5"
+            class="group md:absolute will-change-transform transform-none opacity-100 w-80 h-62 md:z-4 md:hover:z-10 hover:scale-[1.08] transition-all duration-300 ease-out md:bottom-2.75 md:left-60.5"
           >
             <div
-              class="relative bg-white border-white border-4 border-solid w-full h-full rotate-[4deg] group-hover:rotate-0 transition-transform duration-300 ease-out shadow-md rounded-lg overflow-hidden p-1"
+              class="relative bg-white border-white border-4 border-solid w-full h-full md:rotate-[4deg] md:group-hover:rotate-0 transition-transform duration-300 ease-out shadow-md rounded-lg overflow-hidden p-1"
             >
               <div class="absolute inset-0">
                 <NuxtImg
@@ -102,10 +104,10 @@ const isMobile = breakpoints.smaller("sm"); // < 640px
 
           <!-- Image 3 -->
           <div
-            class="group absolute will-change-transform transform-none opacity-100 w-80 h-62 z-1 hover:z-10 hover:scale-[1.08] transition-all duration-300 ease-out top-2.5 left-118"
+            class="group md:absolute will-change-transform transform-none opacity-100 w-80 h-62 md:z-1 md:hover:z-10 hover:scale-[1.08] transition-all duration-300 ease-out md:top-2.5 md:left-118"
           >
             <div
-              class="relative bg-white border-white border-4 border-solid w-full h-full rotate-[-4deg] group-hover:rotate-0 transition-transform duration-300 ease-out shadow-md rounded-lg overflow-hidden p-1"
+              class="relative bg-white border-white border-4 border-solid w-full h-full md:rotate-[-4deg] md:group-hover:rotate-0 transition-transform duration-300 ease-out shadow-md rounded-lg overflow-hidden p-1"
             >
               <div class="absolute inset-0">
                 <NuxtImg
@@ -119,10 +121,10 @@ const isMobile = breakpoints.smaller("sm"); // < 640px
 
           <!-- Image 4 -->
           <div
-            class="group absolute will-change-transform transform-none opacity-100 w-80 h-62 z-4 hover:z-10 hover:scale-[1.08] transition-all duration-300 ease-out bottom-2.25 left-176.5"
+            class="group md:absolute will-change-transform transform-none opacity-100 w-80 h-62 md:z-4 md:hover:z-10 hover:scale-[1.08] transition-all duration-300 ease-out md:bottom-2.25 md:left-176.5"
           >
             <div
-              class="relative bg-white border-white border-4 border-solid w-full h-full rotate-[4deg] group-hover:rotate-0 transition-transform duration-300 ease-out shadow-md rounded-lg overflow-hidden p-1"
+              class="relative bg-white border-white border-4 border-solid w-full h-full md:rotate-[4deg] md:group-hover:rotate-0 transition-transform duration-300 ease-out shadow-md rounded-lg overflow-hidden p-1"
             >
               <div class="absolute inset-0">
                 <NuxtImg
