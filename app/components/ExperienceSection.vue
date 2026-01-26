@@ -26,7 +26,7 @@
           <!-- Content -->
           <div class="flex flex-col gap-1">
             <p class="text-foreground">
-              Lead Engineer at
+              Lead Developer at
               <a
                 href="https://www.schoolbooks.ke"
                 target="_blank"
@@ -74,7 +74,7 @@
                 <span class="h-5 w-5 inline-flex items-center justify-center">
                   <NuxtImg
                     src="/images/sunculture.png"
-                    alt="SunCulture"
+                    alt="SunCulture Logo"
                     class="h-4 w-4"
                   />
                 </span>
