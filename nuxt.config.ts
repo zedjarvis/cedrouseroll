@@ -74,7 +74,7 @@ export default defineNuxtConfig({
         { property: "og:type", content: "website" },
         {
           property: "og:title",
-          content: "Ced Omondi — Software Engineer & Design Engineer",
+          content: "Cedrouseroll Omondi — Software Engineer & Design Engineer",
         },
         {
           property: "og:description",
