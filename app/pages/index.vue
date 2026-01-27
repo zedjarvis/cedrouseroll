@@ -38,7 +38,7 @@ onKeyStroke(["c", "C"], (e) => {
   copy(email.value);
 });
 
-watch(copied, (value) => {
+watch(copied, (value: boolean) => {
   if (value) {
     toast.success("COPIED EMAIL", {
       position: "top-center",
@@ -87,7 +87,7 @@ onUnmounted(() => {
       class="flex w-full justify-between items-center max-w-2xl py-10 px-4"
     >
       <div class="flex items-center gap-2">
-        <NuxtImg
+        <img
           src="/images/signature.svg"
           class="h-7"
           alt="Ced's Signature Logo"
@@ -116,7 +116,7 @@ onUnmounted(() => {
             <div
               class="h-14 w-14 overflow-hidden [mask:url(/images/mask.svg)_50%/cover_no-repeat_alpha]"
             >
-              <NuxtImg
+              <img
                 src="/images/ced.jpeg"
                 sizes="56"
                 alt="Cedrouseroll Omondi"
@@ -137,7 +137,7 @@ onUnmounted(() => {
               </h1>
               <div class="scale-95 aspect-square relative w-5">
                 <div class="aspect-square w-5 h-4.5">
-                  <NuxtImg
+                  <img
                     src="/images/verified.svg"
                     alt="Verified"
                     class="h-full w-full"
@@ -146,7 +146,7 @@ onUnmounted(() => {
               </div>
             </div>
 
-            <p class="text-sm text-[#8f8f8f] font-medium">Software Engineer</p>
+            <p class="text-sm text-[#8f8f8f] font-medium">Software Developer</p>
           </div>
         </div>
 
@@ -163,7 +163,7 @@ onUnmounted(() => {
             </LinkPreview>
             based in Nairobi, Kenya
             <span class="inline-flex items-center gap-1">
-              <NuxtImg
+              <img
                 src="/images/ke.svg"
                 alt="Kenyan Flag"
                 class="h-3.5 w-auto rounded"
@@ -217,8 +217,5 @@ onUnmounted(() => {
       <!-- 👉 CONTACT -->
       <ContactSection />
     </main>
-
-    <!-- 👉 FOOTER -->
-    <CustomFooter />
   </div>
 </template>
