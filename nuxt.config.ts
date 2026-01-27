@@ -55,7 +55,7 @@ export default defineNuxtConfig({
       },
 
       title: "Cedrouseroll Omondi — Software Engineer & Design Engineer",
-      titleTemplate: "%s · Cedrouseroll Omondi",
+      // titleTemplate: "%s · Cedrouseroll Omondi",
 
       meta: [
         // Core SEO
