@@ -5,6 +5,9 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
+  nitro: {
+    preset: "static",
+  },
   ssr: false,
 
   css: ["~/assets/css/tailwind.css"],
@@ -36,6 +39,9 @@ export default defineNuxtConfig({
   colorMode: {
     classSuffix: "",
   },
+  // image: {
+  //   provider: "ipxStatic",
+  // },
   fonts: {
     families: [
       { name: "Inter", provider: "google" },
@@ -43,6 +49,7 @@ export default defineNuxtConfig({
     ],
   },
   app: {
+    // baseURL: "/zedjarvis.github.io/",
     head: {
       meta: [{ name: "theme-color", content: "#0a0a0a" }],
       link: [
@@ -71,4 +78,3 @@ export default defineNuxtConfig({
     },
   },
 });
-
