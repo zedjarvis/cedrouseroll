@@ -38,7 +38,7 @@
                 <div
                   class="h-11 w-11 rounded-full overflow-hidden ring-1 ring-border"
                 >
-                  <NuxtImg
+                  <img
                     src="/images/gpt.svg"
                     alt="ChatGPT avatar"
                     class="h-full w-full object-cover"
@@ -49,7 +49,7 @@
                 <div
                   class="absolute -bottom-0.5 -right-0.5 h-5 w-5 rounded-full bg-white ring-1 ring-border flex items-center justify-center"
                 >
-                  <NuxtImg
+                  <img
                     src="/images/openai.png"
                     alt="OpenAI logo"
                     class="h-5 w-5 object-contain rounded shadow-md"

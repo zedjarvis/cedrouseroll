@@ -70,13 +70,13 @@ const isMobile = breakpoints.smaller("sm"); // < 640px
         >
           <!-- Image 1 -->
           <div
-            class="group md:absolute will-change-transform transform-none opacity-100 w-80 h-62 md:z-1 md:hover:z-10 hover:scale-[1.08] transition-all duration-300 ease-out md:top-2.75 md:left-2.25"
+            class="group md:absolute will-change-transform transform-none opacity-100 w-80 h-62 md:z-1 md:hover:z-10 hover:scale-[1.08] transition-all duration-300 ease-out md:top-2.75 md:left-2.25 cursor-grab"
           >
             <div
               class="relative bg-white border-white border-4 border-solid w-full h-full md:rotate-[-4deg] md:group-hover:rotate-0 transition-transform duration-300 ease-out shadow-md rounded-lg overflow-hidden p-1"
             >
               <div class="absolute inset-0">
-                <NuxtImg
+                <img
                   src="/images/sb.jpg"
                   alt="Project screenshot"
                   class="w-full h-full object-cover"
@@ -93,7 +93,7 @@ const isMobile = breakpoints.smaller("sm"); // < 640px
               class="relative bg-white border-white border-4 border-solid w-full h-full md:rotate-[4deg] md:group-hover:rotate-0 transition-transform duration-300 ease-out shadow-md rounded-lg overflow-hidden p-1"
             >
               <div class="absolute inset-0">
-                <NuxtImg
+                <img
                   src="/images/portfolio.jpg"
                   alt="Project screenshot"
                   class="w-full h-full object-cover"
@@ -110,7 +110,7 @@ const isMobile = breakpoints.smaller("sm"); // < 640px
               class="relative bg-white border-white border-4 border-solid w-full h-full md:rotate-[-4deg] md:group-hover:rotate-0 transition-transform duration-300 ease-out shadow-md rounded-lg overflow-hidden p-1"
             >
               <div class="absolute inset-0">
-                <NuxtImg
+                <img
                   src="/images/meskith.jpg"
                   alt="Project screenshot"
                   class="w-full h-full object-cover"
@@ -127,7 +127,7 @@ const isMobile = breakpoints.smaller("sm"); // < 640px
               class="relative bg-white border-white border-4 border-solid w-full h-full md:rotate-[4deg] md:group-hover:rotate-0 transition-transform duration-300 ease-out shadow-md rounded-lg overflow-hidden p-1"
             >
               <div class="absolute inset-0">
-                <NuxtImg
+                <img
                   src="/images/portfolio2.jpg"
                   alt="Project screenshot"
                   class="w-full h-full object-cover"

@@ -9,8 +9,13 @@ const { weather, loading } = useWeather();
   <footer class="flex justify-center items-center w-full py-4">
     <div class="flex flex-col gap-5 max-w-2xl w-full mx-auto p-4">
       <div class="text-center flex flex-col gap-2 w-full">
-        <div class="text-xs text-muted-foreground">
-          Built using Nuxt4 . TailwindCSS . Shadcn-vue
+        <div class="text-xs text-muted-foreground flext items-center">
+          <NuxtLink external to="https://nuxt.com">Built using Nuxtjs</NuxtLink>
+          .
+          <NuxtLink external to="https://tailwindcss.com/"
+            >TailwindCSS</NuxtLink
+          >
+          . <NuxtLink to="https://www.shadcn-vue.com">Shadcn-vue</NuxtLink>
         </div>
         <div class="text-sm text-muted-foreground">
           &copy; {{ new Date().getFullYear() }}

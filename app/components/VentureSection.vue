@@ -17,7 +17,10 @@ import { ArrowUpRight } from "lucide-vue-next";
     </div>
 
     <div class="flex flex-col w-full">
-      <div
+      <NuxtLink
+        external
+        target="_blank"
+        to="https://www.schoolbooks.ke"
         class="hover:bg-[#141414] transition-all ease-out duration-200 flex justify-center py-1"
       >
         <div
@@ -43,7 +46,8 @@ import { ArrowUpRight } from "lucide-vue-next";
             <ArrowUpRight :size="24" />
           </div>
         </div>
-      </div>
+      </NuxtLink>
+
       <div
         class="hover:bg-[#141414] transition-all ease-out duration-200 flex justify-center py-2"
       >
@@ -52,14 +56,14 @@ import { ArrowUpRight } from "lucide-vue-next";
         >
           <div class="flex gap-4 items-center">
             <div>
-              <NuxtImg
+              <img
                 src="/images/nu.png"
                 class="h-10 w-10 rounded-lg"
                 alt="Nudge logo"
               />
             </div>
             <div class="flex flex-col justify-between">
-              <p class="text-foreground md:text-lg">Nu.dge</p>
+              <p class="text-foreground md:text-lg">Nu-dge</p>
               <p class="text-sm text-muted-foreground">
                 Ai Project manager for my everyday tasks
               </p>

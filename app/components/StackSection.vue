@@ -33,7 +33,7 @@ const stack: StackItem[] = [
         <div class="flex flex-wrap items-center gap-5">
           <Tooltip v-for="item in stack" :key="item.title">
             <TooltipTrigger as-child>
-              <NuxtImg
+              <img
                 :src="item.src"
                 :alt="item.title"
                 class="h-10 w-auto cursor-default transition-transform duration-300 ease-out transform-gpu hover:scale-110"

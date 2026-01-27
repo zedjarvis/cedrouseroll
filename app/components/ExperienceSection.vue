@@ -72,7 +72,7 @@
                 class="inline-flex items-center gap-1 hover:text-foreground transition"
               >
                 <span class="h-5 w-5 inline-flex items-center justify-center">
-                  <NuxtImg
+                  <img
                     src="/images/sunculture.png"
                     alt="SunCulture Logo"
                     class="h-4 w-4"

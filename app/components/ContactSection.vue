@@ -53,7 +53,9 @@ const sendMessage = async () => {
     return;
   }
 
-  toast.success("Message sent successfully ✨", { position: "top-center" });
+  toast.success("Message sent successfully", {
+    position: "top-center",
+  });
 
   // reset
   name.value = "";
@@ -127,7 +129,7 @@ const onKeydown = (e: KeyboardEvent) => {
               <Textarea
                 v-model="message"
                 placeholder="Message"
-                class="w-full min-h-30 rounded-lg resize-none"
+                class="w-full min-h-50 rounded-lg resize-none"
                 :aria-invalid="hasSubmitted && errors.message"
                 @keydown="onKeydown"
               />
@@ -222,7 +224,7 @@ const onKeydown = (e: KeyboardEvent) => {
     </div>
 
     <div class="flex justify-center items-center w-full mt-6">
-      <NuxtImg src="/images/sig.svg" class="w-60" alt="Ced's sig" />
+      <img src="/images/sig.svg" class="w-60" alt="Ced's sig" />
     </div>
   </section>
 </template>
