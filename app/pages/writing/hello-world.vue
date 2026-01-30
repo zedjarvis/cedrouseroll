@@ -52,7 +52,9 @@ const readTime = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-col items-center w-full bg-background text-foreground">
+  <div
+    class="flex flex-col items-center w-full bg-background min-h-[85vh] text-foreground"
+  >
     <!-- Header -->
     <header class="flex flex-col gap-8 w-full max-w-2xl py-10 px-4">
       <NuxtLink
