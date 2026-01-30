@@ -15,7 +15,7 @@
 
       <!-- ITEM -->
       <div class="w-full">
-        <div class="flex flex-col sm:flex-row sm:gap-16 gap-2">
+        <div class="flex flex-col sm:flex-row sm:gap-8 gap-2">
           <!-- Period -->
           <div
             class="sm:w-30 shrink-0 text-xs sm:text-base text-muted-foreground"
@@ -24,7 +24,7 @@
           </div>
 
           <!-- Content -->
-          <div class="flex flex-col gap-1">
+          <div class="flex flex-col gap-1 w-full">
             <p class="text-foreground">
               Lead Developer at
               <a
@@ -42,7 +42,7 @@
               </a>
             </p>
 
-            <p class="text-[#8f8f8f] max-w-xl text-sm">
+            <p class="text-[#8f8f8f] text-sm w-full">
               Leading backend and API development, building secure, scalable
               systems and internal tools that support core operations and
               financial workflows.
@@ -53,7 +53,7 @@
 
       <!-- ITEM -->
       <div class="w-full">
-        <div class="flex flex-col sm:flex-row sm:gap-16 gap-2">
+        <div class="flex flex-col sm:flex-row sm:gap-8 gap-2">
           <!-- Period -->
           <div
             class="sm:w-30 shrink-0 text-xs sm:text-base text-muted-foreground"
@@ -62,7 +62,7 @@
           </div>
 
           <!-- Content -->
-          <div class="flex flex-col gap-1">
+          <div class="flex flex-col gap-1 w-full">
             <p class="text-foreground flex flex-wrap items-center gap-1">
               Full-Stack Engineer at
               <a
@@ -82,7 +82,7 @@
               </a>
             </p>
 
-            <p class="text-[#8f8f8f] max-w-xl text-sm">
+            <p class="text-[#8f8f8f] text-sm w-full">
               Built and maintained internal systems, secure APIs, and commission
               workflows while supporting architecture reviews and cross-team
               delivery.
@@ -93,7 +93,7 @@
 
       <!-- ITEM -->
       <div class="w-full">
-        <div class="flex flex-col sm:flex-row sm:gap-16 gap-2">
+        <div class="flex flex-col sm:flex-row sm:gap-8 gap-2">
           <!-- Period -->
           <div
             class="sm:w-30 shrink-0 text-xs sm:text-base text-muted-foreground"
@@ -102,7 +102,7 @@
           </div>
 
           <!-- Content -->
-          <div class="flex flex-col gap-1">
+          <div class="flex flex-col gap-1 w-full">
             <p class="text-foreground">
               Software Developer at
               <a
@@ -120,7 +120,7 @@
               </a>
             </p>
 
-            <p class="text-[#8f8f8f] max-w-xl text-sm">
+            <p class="text-[#8f8f8f] text-sm w-full">
               Developed and optimized Laravel and Vue applications, improved
               platform performance, and managed deployments across AWS
               infrastructure.
