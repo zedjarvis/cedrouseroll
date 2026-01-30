@@ -6,7 +6,7 @@ const { weather, loading } = useWeather();
 </script>
 
 <template>
-  <footer class="flex justify-center items-center w-full py-4">
+  <footer class="flex justify-center items-center w-full py-8">
     <div class="flex flex-col gap-5 max-w-2xl w-full mx-auto p-4">
       <div class="text-center flex flex-col gap-2 w-full">
         <div class="text-xs text-muted-foreground flext items-center">

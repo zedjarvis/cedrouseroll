@@ -143,7 +143,7 @@ const onKeydown = (e: KeyboardEvent) => {
           <div class="flex items-center justify-between">
             <Button
               variant="secondary"
-              class="rounded-full"
+              class="rounded-full cursor-pointer"
               type="submit"
               :disabled="isSubmitting"
             >
