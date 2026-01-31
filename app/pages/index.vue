@@ -1,80 +1,32 @@
 <script setup lang="ts">
-import { Clock } from "lucide-vue-next";
-import { toast } from "vue-sonner";
-import { Button } from "~/components/ui/button";
+import { GradualBlur } from "~/components/ui/gradual-blur";
 
-definePageMeta({
-  name: "Index",
-});
+definePageMeta({ name: "Index" });
 
 useSeoMeta({
   title: "Cedrouseroll Omondi - Software Engineer",
 });
-// copy email
-const email = ref("omondicedo@gmail.com");
-const { copy, copied, isSupported } = useClipboard({ source: email });
 
-onKeyStroke(["c", "C"], (e) => {
-  const target = e.target as HTMLElement;
-
-  // Guard: don't hijack typing
-  if (
-    target?.tagName === "INPUT" ||
-    target?.tagName === "TEXTAREA" ||
-    target?.isContentEditable
-  ) {
-    return;
-  }
-  if (e.repeat) {
-    console.log("REPEATED,, ABORTING");
-  }
-
-  // Clipboard not supported
-  if (!isSupported) {
-    toast.error("Clipboard not supported on this device");
-    return;
-  }
-
-  copy(email.value);
-});
-
-watch(copied, (value: boolean) => {
-  if (value) {
-    toast.success("COPIED EMAIL", {
-      position: "top-center",
-      action: {
-        label: "Send Message",
-        onClick: () => console.log("Chatting"),
-      },
-    });
-  }
-});
-
-// reactive time logic
-const currentTime = ref("");
-let timer: number;
-
-const updateTime = () => {
-  const now = new Date();
-
-  const time = now.toLocaleTimeString("en-US", {
-    timeZone: "Africa/Nairobi",
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit",
-    hour12: true,
-  });
-
-  currentTime.value = `${time} GMT+3`;
-};
+const contactRef = useTemplateRef("contactRef");
+const showBlur = ref(true);
 
 onMounted(() => {
-  updateTime();
-  timer = window.setInterval(updateTime, 1000);
-});
+  if (!contactRef.value) return;
 
-onUnmounted(() => {
-  clearInterval(timer);
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      // Hide blur once contact is visible
+      showBlur.value = !entry.isIntersecting;
+    },
+    {
+      root: null,
+      threshold: 0.1, // trigger as soon as contact enters view
+    },
+  );
+
+  observer.observe(contactRef.value);
+
+  onBeforeUnmount(() => observer.disconnect());
 });
 </script>
 
@@ -83,139 +35,58 @@ onUnmounted(() => {
     class="flex flex-col items-center w-full min-h-screen bg-background text-foreground"
   >
     <!-- Header -->
-    <header
-      class="flex w-full justify-between items-center max-w-2xl py-10 px-4"
-    >
-      <div class="flex items-center gap-2">
-        <img
-          src="/images/signature.svg"
-          class="h-7"
-          alt="Ced's Signature Logo"
-        />
-        <p class="text-xs font-medium font-geist">EST. 2000</p>
-      </div>
-
-      <div class="flex items-center gap-2">
-        <Clock :size="16" class="text-muted-foreground" />
-        <p class="select-none text-xs tabular-nums font-geist">
-          {{ currentTime }}
-        </p>
-      </div>
-    </header>
+    <IndexHeader />
 
     <!-- Main -->
-    <main class="w-full flex flex-col gap-10 pb-16">
-      <section
-        id="intro"
-        class="max-w-2xl mx-auto px-4 flex flex-col items-start gap-6 w-full"
+    <main class="w-full overflow-hidden">
+      <div
+        class="w-full relative flex flex-col gap-10 pb-16 h-full overflow-y-auto"
       >
-        <!-- Profile -->
-        <div id="profile" class="flex flex-col items-start gap-4">
-          <!-- Avatar -->
-          <div class="relative h-14 w-14">
-            <div
-              class="h-14 w-14 overflow-hidden [mask:url(/images/mask.svg)_50%/cover_no-repeat_alpha]"
-            >
-              <img
-                src="/images/ced.jpeg"
-                sizes="56"
-                alt="Cedrouseroll Omondi"
-              />
-            </div>
+        <!-- 👉 INTRO -->
+        <IntroSection />
 
-            <!-- Online status dot -->
-            <span
-              class="absolute bottom-0 -right-1.5 h-3 w-3 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.8)]"
-            />
-          </div>
-
-          <!-- Name + Role (below avatar) -->
-          <div id="Name+Role" class="flex flex-col items-start">
-            <div class="flex items-center gap-1.5">
-              <h1 class="text-base font-semibold tracking-wide">
-                Cedrouseroll Omondi
-              </h1>
-              <div class="scale-95 aspect-square relative w-5">
-                <div class="aspect-square w-5 h-4.5">
-                  <img
-                    src="/images/verified.svg"
-                    alt="Verified"
-                    class="h-full w-full"
-                  />
-                </div>
-              </div>
-            </div>
-
-            <p class="text-sm text-[#8f8f8f] font-medium">Software Developer</p>
-          </div>
-        </div>
-
-        <div class="contents">
-          <p class="text-[#8f8f8f] tracking-wide leading-6">
-            Hey, I'm Ced, a lead Developer at
-            <LinkPreview url="https://www.schoolbooks.ke">
-              <span class="text-foreground">Schoolbooks </span>
-              <span
-                class="bg-[#248567] h-5 w-5 inline-flex text-white font-semibold rounded items-center justify-center"
-              >
-                S
-              </span>
-            </LinkPreview>
-            based in Nairobi, Kenya
-            <span class="inline-flex items-center gap-1">
-              <img
-                src="/images/ke.svg"
-                alt="Kenyan Flag"
-                class="h-3.5 w-auto rounded"
-              />
-            </span>
-            where I specialize in building secure, stateless APIs and backend
-            systems with a strong focus on performance, accessibility,
-            simplicity and reliability.
-          </p>
-        </div>
-
-        <div id="email-shortcut">
-          <p class="text-[#8f8f8f]">
-            Press
-            <Button
-              variant="outline"
-              size="sm"
-              class="h-6 w-5"
-              @click="copy(email)"
-            >
-              <kbd>C</kbd>
-            </Button>
-            to copy my email
-          </p>
-        </div>
-      </section>
-
-      <!-- 👉 PROJECTS -->
-      <ClientOnly>
+        <!-- 👉 PROJECTS -->
         <WorkSection />
-      </ClientOnly>
 
-      <!-- 👉 EXPERIENCE -->
-      <ExperienceSection />
+        <!-- 👉 EXPERIENCE -->
+        <ExperienceSection />
 
-      <!-- 👉 TESTIMONIALS -->
-      <TestimonialSection />
+        <!-- 👉 TESTIMONIALS -->
+        <TestimonialSection />
 
-      <!-- 👉 STACK -->
-      <StackSection />
+        <!-- 👉 STACK -->
+        <StackSection />
 
-      <!-- 👉 VENTURES -->
-      <VentureSection />
+        <!-- 👉 VENTURES -->
+        <VentureSection />
 
-      <!-- 👉 WRITING -->
-      <WritingSection />
+        <!-- 👉 WRITING -->
+        <WritingSection />
 
-      <!-- 👉 PERSONAL -->
-      <PersonalSection />
+        <!-- 👉 PERSONAL -->
+        <PersonalSection />
 
-      <!-- 👉 CONTACT -->
-      <ContactSection />
+        <!-- 👉 CONTACT -->
+        <div ref="contactRef">
+          <ContactSection />
+        </div>
+      </div>
+      <!-- gradual blur -->
     </main>
+    <div
+      v-if="showBlur"
+      class="fixed bottom-0 left-0 w-full pointer-events-none"
+    >
+      <GradualBlur
+        target="parent"
+        position="bottom"
+        height="4rem"
+        :strength="3"
+        :div-count="5"
+        curve="bezier"
+        :exponential="true"
+        :opacity="1"
+      />
+    </div>
   </div>
 </template>
