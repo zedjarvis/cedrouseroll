@@ -38,7 +38,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="w-full relative">
+  <div class="w-full relative overflow-hidden">
     <slot />
 
     <!-- Footer -->
