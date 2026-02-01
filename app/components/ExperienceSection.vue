@@ -26,7 +26,7 @@
           <!-- Content -->
           <div class="flex flex-col gap-1 w-full">
             <p class="text-foreground">
-              Lead Developer at
+              Lead Engineer at
               <a
                 href="https://www.schoolbooks.ke"
                 target="_blank"
