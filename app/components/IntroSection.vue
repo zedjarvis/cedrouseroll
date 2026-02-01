@@ -81,13 +81,13 @@ watch(copied, (value: boolean) => {
           </div>
         </div>
 
-        <p class="text-sm text-[#8f8f8f] font-medium">Software Developer</p>
+        <p class="text-sm text-[#8f8f8f] font-medium">Software Engineer</p>
       </div>
     </div>
 
     <div class="contents">
       <p class="text-[#8f8f8f] tracking-wide leading-6">
-        Hey, I'm Ced, a lead Developer at
+        Hey, I'm Ced, a lead Engineer at
         <LinkPreview url="https://www.schoolbooks.ke">
           <span class="text-foreground">Schoolbooks </span>
           <span
