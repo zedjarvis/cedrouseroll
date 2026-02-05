@@ -48,7 +48,7 @@ onBeforeUnmount(() => {
     <div
       v-show="!cursorLeftPage && showCustomCursor"
       ref="cursorRef"
-      class="pointer-events-none fixed top-0 left-0 z-13 h-5 w-5 rounded-full bg-white/30 mix-blend-difference hidden md:block backdrop-blur"
+      class="pointer-events-none fixed top-0 left-0 z-99999 h-5 w-5 rounded-full bg-white/30 mix-blend-difference hidden md:block backdrop-blur"
     />
   </div>
 </template>
