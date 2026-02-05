@@ -75,7 +75,7 @@ onMounted(() => {
     </main>
     <div
       v-if="showBlur"
-      class="fixed bottom-0 left-0 w-full pointer-events-none z-12"
+      class="fixed bottom-0 left-0 w-full pointer-events-none z-10"
     >
       <GradualBlur
         target="parent"
