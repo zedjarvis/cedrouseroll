@@ -118,7 +118,7 @@ function openModal(project: Project) {
               class="relative bg-white border-white border-4 border-solid w-full h-full md:rotate-[-4deg] md:group-hover:rotate-0 transition-transform duration-300 ease-out shadow-md rounded-lg overflow-hidden p-1"
             >
               <button
-                class="absolute hidden group-hover:flex items-center justify-center h-9 w-9 bg-[#1c1c1c] hover:bg-[#222] rounded-full top-2 right-2 text-muted-foreground transition z-2"
+                class="absolute hidden group-hover:flex items-center justify-center h-9 w-9 bg-[#1c1c1c] hover:bg-[#222] rounded-full top-2 right-2 text-muted-foreground transition z-2 cursor-pointer"
                 @click="openModal(projects[0] as Project)"
               >
                 <Maximize :size="18" />
@@ -141,7 +141,7 @@ function openModal(project: Project) {
               class="relative bg-white border-white border-4 border-solid w-full h-full md:rotate-[4deg] md:group-hover:rotate-0 transition-transform duration-300 ease-out shadow-md rounded-lg overflow-hidden p-1"
             >
               <button
-                class="absolute hidden group-hover:flex items-center justify-center h-9 w-9 bg-[#1c1c1c] hover:bg-[#222] rounded-full top-2 right-2 text-muted-foreground transition z-2"
+                class="absolute hidden group-hover:flex items-center justify-center h-9 w-9 bg-[#1c1c1c] hover:bg-[#222] rounded-full top-2 right-2 text-muted-foreground transition z-2 cursor-pointer"
                 @click="openModal(projects[1] as Project)"
               >
                 <Maximize :size="18" />
@@ -165,7 +165,7 @@ function openModal(project: Project) {
               class="relative bg-white border-white border-4 border-solid w-full h-full md:rotate-[-4deg] md:group-hover:rotate-0 transition-transform duration-300 ease-out shadow-md rounded-lg overflow-hidden p-1"
             >
               <button
-                class="absolute hidden group-hover:flex items-center justify-center h-9 w-9 bg-[#1c1c1c] hover:bg-[#222] rounded-full top-2 right-2 text-muted-foreground transition z-2"
+                class="absolute hidden group-hover:flex items-center justify-center h-9 w-9 bg-[#1c1c1c] hover:bg-[#222] rounded-full top-2 right-2 text-muted-foreground transition z-2 cursor-pointer"
                 @click="openModal(projects[2] as Project)"
               >
                 <Maximize :size="18" />
@@ -189,7 +189,7 @@ function openModal(project: Project) {
               class="relative bg-white border-white border-4 border-solid w-full h-full md:rotate-[4deg] md:group-hover:rotate-0 transition-transform duration-300 ease-out shadow-md rounded-lg overflow-hidden p-1"
             >
               <button
-                class="absolute hidden group-hover:flex items-center justify-center h-9 w-9 bg-[#1c1c1c] hover:bg-[#222] rounded-full top-2 right-2 text-muted-foreground transition z-2"
+                class="absolute hidden group-hover:flex items-center justify-center h-9 w-9 bg-[#1c1c1c] hover:bg-[#222] rounded-full top-2 right-2 text-muted-foreground transition z-2 cursor-pointer"
                 @click="openModal(projects[3] as Project)"
               >
                 <Maximize :size="18" />
