@@ -60,6 +60,7 @@ watch(copied, (value: boolean) => {
 
         <!-- Online status dot -->
         <span
+          data-cursor="availability"
           class="absolute bottom-0 -right-1.5 h-3 w-3 rounded-full bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.8)]"
         />
       </div>
@@ -85,30 +86,32 @@ watch(copied, (value: boolean) => {
       </div>
     </div>
 
-    <div class="contents">
-      <p class="text-[#8f8f8f] tracking-wide leading-6">
-        Hey, I'm Ced, a lead Engineer at
-        <LinkPreview url="https://www.schoolbooks.ke">
-          <span class="text-foreground">Schoolbooks </span>
-          <span
-            class="bg-[#248567] h-5 w-5 inline-flex text-white font-semibold rounded items-center justify-center"
-          >
-            S
+    <ClientOnly>
+      <div class="contents">
+        <p class="text-[#8f8f8f] tracking-wide leading-6">
+          Hey, I'm Ced, a lead Engineer at
+          <LinkPreview url="https://www.schoolbooks.ke">
+            <span class="text-foreground">Schoolbooks </span>
+            <span
+              class="bg-[#248567] h-5 w-5 inline-flex text-white font-semibold rounded items-center justify-center"
+            >
+              S
+            </span>
+          </LinkPreview>
+          based in Nairobi, Kenya
+          <span class="inline-flex items-center gap-1">
+            <img
+              src="/images/ke.svg"
+              alt="Kenyan Flag"
+              class="h-3.5 w-auto rounded"
+            />
           </span>
-        </LinkPreview>
-        based in Nairobi, Kenya
-        <span class="inline-flex items-center gap-1">
-          <img
-            src="/images/ke.svg"
-            alt="Kenyan Flag"
-            class="h-3.5 w-auto rounded"
-          />
-        </span>
-        where I specialize in building secure, stateless APIs and backend
-        systems with a strong focus on performance, accessibility, simplicity
-        and reliability.
-      </p>
-    </div>
+          where I specialize in building secure, stateless APIs and backend
+          systems with a strong focus on performance, accessibility, simplicity
+          and reliability.
+        </p>
+      </div>
+    </ClientOnly>
 
     <div id="email-shortcut">
       <p class="text-[#8f8f8f]">
