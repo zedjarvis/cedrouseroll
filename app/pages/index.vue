@@ -81,9 +81,9 @@ onMounted(() => {
         target="parent"
         position="bottom"
         height="4rem"
-        :strength="3"
+        :strength="2.5"
         :div-count="5"
-        curve="bezier"
+        curve="ease-in-out"
         :exponential="true"
         :opacity="1"
       />
