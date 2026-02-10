@@ -23,6 +23,8 @@
       <div class="w-full">
         <div>
           <iframe
+            id="spotify-music"
+            name="spotify favourite music"
             data-testid="embed-iframe"
             style="border-radius: 12px"
             src="https://open.spotify.com/embed/track/4qZLrKsaGkYmVRGUviVPtk?utm_source=generator&theme=0"
