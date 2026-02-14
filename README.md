@@ -4,7 +4,7 @@ This is my personal portfolio website built with **Nuxt 4**, **Vue 3**, **Tailwi
 
 It includes my selected work, experience, writing, and a contact form powered by Supabase.
 
-Live: **<https://cedrouseroll.vercel.app>**
+Live: **<https://cedrouseroll.dev>**
 
 ---
 
