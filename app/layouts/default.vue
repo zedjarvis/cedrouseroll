@@ -6,55 +6,105 @@ const showCustomCursor = ref(false);
 const isAvailabilityHover = ref(false);
 
 const CURSOR_SIZE = 20;
-const FOLLOW_SPEED = 0.35; // 👈 tight follow (increase = faster)
+const FOLLOW_SPEED = 0.35;
 
 let mouseX = 0;
 let mouseY = 0;
 let currentX = 0;
 let currentY = 0;
-let rafId = 0;
+let rafId: number | null = null;
 
-const animateCursor = () => {
+const canHover = ref(false);
+const reduceMotion = ref(false);
+
+function animateCursor() {
   currentX += (mouseX - currentX) * FOLLOW_SPEED;
   currentY += (mouseY - currentY) * FOLLOW_SPEED;
 
-  if (cursorRef.value) {
-    cursorRef.value.style.transform = `
-      translate3d(
-        ${currentX - CURSOR_SIZE / 2}px,
-        ${currentY - CURSOR_SIZE / 2}px,
-        0
-      )
-    `;
+  const el = cursorRef.value;
+  if (el) {
+    // keep it as a single-line transform string (fast path)
+    el.style.transform = `translate3d(${currentX - CURSOR_SIZE / 2}px, ${
+      currentY - CURSOR_SIZE / 2
+    }px, 0)`;
   }
 
-  rafId = requestAnimationFrame(animateCursor);
-};
+  rafId = window.requestAnimationFrame(animateCursor);
+}
 
-const onMouseMove = (e: MouseEvent) => {
+function startAnimation() {
+  if (rafId !== null) return;
+  rafId = window.requestAnimationFrame(animateCursor);
+}
+
+function stopAnimation() {
+  if (rafId === null) return;
+  cancelAnimationFrame(rafId);
+  rafId = null;
+}
+
+function onMouseMove(e: MouseEvent) {
   if (!showCustomCursor.value) showCustomCursor.value = true;
-
   mouseX = e.clientX;
   mouseY = e.clientY;
+}
 
-  const el = document.elementFromPoint(
-    e.clientX,
-    e.clientY,
-  ) as HTMLElement | null;
+/**
+ * Instead of elementFromPoint on every move:
+ * - listen to pointerover/out on document
+ * - flip state when entering/leaving availability target
+ */
+function onPointerOver(e: PointerEvent) {
+  const target = e.target as HTMLElement | null;
+  if (!target) return;
+  if (target.closest?.('[data-cursor="availability"]')) {
+    isAvailabilityHover.value = true;
+  }
+}
 
-  isAvailabilityHover.value = !!el?.closest('[data-cursor="availability"]');
-};
+function onPointerOut(e: PointerEvent) {
+  const target = e.target as HTMLElement | null;
+  if (!target) return;
+
+  // If we're moving out of the availability element and not into another one
+  const related = e.relatedTarget as HTMLElement | null;
+  const leavingAvailability = target.closest?.('[data-cursor="availability"]');
+  const enteringAvailability = related?.closest?.(
+    '[data-cursor="availability"]',
+  );
+
+  if (leavingAvailability && !enteringAvailability) {
+    isAvailabilityHover.value = false;
+  }
+}
+
+function onVisibilityChange() {
+  if (document.visibilityState === "visible") startAnimation();
+  else stopAnimation();
+}
 
 onMounted(() => {
-  if (window.matchMedia("(hover: hover)").matches) {
-    window.addEventListener("mousemove", onMouseMove);
-    rafId = requestAnimationFrame(animateCursor);
-  }
+  canHover.value = window.matchMedia?.("(hover: hover)")?.matches ?? false;
+  reduceMotion.value =
+    window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+
+  // Only run custom cursor on devices that can hover + users who allow motion
+  if (!canHover.value || reduceMotion.value) return;
+
+  window.addEventListener("mousemove", onMouseMove, { passive: true });
+  document.addEventListener("pointerover", onPointerOver, { passive: true });
+  document.addEventListener("pointerout", onPointerOut, { passive: true });
+  document.addEventListener("visibilitychange", onVisibilityChange);
+
+  startAnimation();
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener("mousemove", onMouseMove);
-  cancelAnimationFrame(rafId);
+  document.removeEventListener("pointerover", onPointerOver);
+  document.removeEventListener("pointerout", onPointerOut);
+  document.removeEventListener("visibilitychange", onVisibilityChange);
+  stopAnimation();
 });
 </script>
 
@@ -65,14 +115,16 @@ onBeforeUnmount(() => {
     <!-- Footer -->
     <CustomFooter />
 
-    <!-- Custom cursor -->
+    <!-- Custom cursor (decorative) -->
     <div
       v-show="!cursorLeftPage && showCustomCursor"
       ref="cursorRef"
       class="pointer-events-none fixed top-0 left-0 z-99999 h-5 hidden md:flex items-center justify-center rounded-full bg-white/30 mix-blend-difference backdrop-blur"
-      :class="`${isAvailabilityHover ? 'w-fit px-2' : 'w-5'}`"
+      :class="
+        isAvailabilityHover ? 'w-fit px-2 cursor-grab' : 'w-5 cursor-grab'
+      "
+      aria-hidden="true"
     >
-      <!-- Availability text (only on hover target) -->
       <div v-if="isAvailabilityHover" class="flex items-center gap-2">
         <span class="h-3 w-3 rounded-full bg-green-500 shrink-0"></span>
         <span class="text-xs font-medium whitespace-nowrap leading-none">
