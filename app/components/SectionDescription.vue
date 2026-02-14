@@ -1,11 +1,17 @@
 <script setup lang="ts">
-const { text } = defineProps<{
+defineProps<{
   text: string;
+  id?: string;
+  as?: "p" | "div" | "span";
 }>();
 </script>
 
 <template>
-  <p class="text-[#8f8f8f] tracking-wide leading-6">
+  <component
+    :is="as ?? 'p'"
+    :id="id"
+    class="text-[#8f8f8f] tracking-wide leading-6"
+  >
     {{ text }}
-  </p>
+  </component>
 </template>
