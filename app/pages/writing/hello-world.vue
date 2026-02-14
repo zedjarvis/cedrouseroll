@@ -3,51 +3,24 @@ import { CornerDownLeft, Clock, TextAlignStart } from "lucide-vue-next";
 
 useSeoMeta({
   title: "Hello World by Cedrouseroll Omondi",
-});
-/**
- * Blog content as plain text
- * (easy to move to markdown or CMS later)
- */
-const content = `
-I’ve always wanted to write.
-
-Not in a “one day I’ll write a book” kind of way, but in the quieter sense —
-the feeling that thoughts pile up faster than I give them space to breathe.
-Writing has always felt like the missing outlet.
-
-For a long time, I told myself I didn’t have much to say.
-That I needed to be more experienced, more polished, more certain.
-But the truth is, the most interesting part of any journey is rarely the destination.
-It’s the middle — the confusion, the experiments, the lessons learned the hard way.
-
-This blog is my attempt to document that middle.
-
-As I continue growing as a software developer, I find myself constantly learning:
-new tools, better patterns, sharper ways of thinking.
-Some of these lessons come from building things that work.
-Others come from things that break in ways I didn’t expect.
-
-I’m especially drawn to the space where design and engineering overlap.
-Where performance meets aesthetics.
-Where good abstractions quietly improve user experience.
-Where small decisions compound into systems that either empower or frustrate.
-
-This won’t be a place for polished tutorials or definitive answers.
-Instead, it’s a logbook — notes from the field.
-Things I’m figuring out, ideas I’m testing, and perspectives that might change over time.
-
-If you’re also learning, building, or trying to make sense of this craft,
-I hope you’ll find something here that resonates.
-`;
-
-const WORDS_PER_MINUTE = 200;
-
-const wordCount = computed(() => {
-  return content.trim().split(/\s+/).length;
+  description:
+    "A short intro post on writing, learning, and building as a software engineer.",
+  ogTitle: "Hello World — Cedrouseroll Omondi",
+  ogDescription:
+    "A short intro post on writing, learning, and building as a software engineer.",
+  twitterCard: "summary_large_image",
 });
 
-const readTime = computed(() => {
-  return Math.max(1, Math.ceil(wordCount.value / WORDS_PER_MINUTE));
+const articleRef = ref<HTMLElement | null>(null);
+
+const { wordCount, readTime, computeFromEl } = useReadStats({
+  wpm: 200,
+  ignoreSelectors: ["[data-ignore-read]"],
+});
+
+onMounted(async () => {
+  await nextTick();
+  computeFromEl(articleRef.value);
 });
 </script>
 
@@ -57,39 +30,55 @@ const readTime = computed(() => {
   >
     <!-- Header -->
     <header class="flex flex-col gap-8 w-full max-w-2xl py-10 px-4">
-      <NuxtLink
-        to="/"
-        class="flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
-      >
-        <CornerDownLeft :size="15" />
-        <p class="text-xs tracking-wide">BACK</p>
-      </NuxtLink>
+      <nav aria-label="Back navigation">
+        <NuxtLink
+          to="/"
+          class="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded"
+        >
+          <CornerDownLeft :size="15" aria-hidden="true" />
+          <span class="text-xs tracking-wide">BACK</span>
+        </NuxtLink>
+      </nav>
 
       <div
         class="flex justify-between text-sm font-geist text-muted-foreground"
       >
-        <p class="tabular-nums">JAN 26, 2026</p>
+        <!-- Use semantic <time> -->
+        <time datetime="2026-01-26" class="tabular-nums"> JAN 26, 2026 </time>
 
+        <!-- Read stats -->
         <div class="flex gap-6 items-center">
-          <div class="flex gap-2 items-center">
-            <Clock :size="15" />
+          <div
+            class="flex gap-2 items-center"
+            aria-label="Estimated reading time"
+          >
+            <Clock :size="15" aria-hidden="true" />
             <span class="tabular-nums">{{ readTime }}</span>
-            <span>m</span>
+            <span aria-hidden="true">m</span>
+            <span class="sr-only">minutes</span>
           </div>
 
-          <div class="flex gap-2 items-center">
-            <TextAlignStart :size="15" />
+          <div class="flex gap-2 items-center" aria-label="Word count">
+            <TextAlignStart :size="15" aria-hidden="true" />
             <span class="tabular-nums">{{ wordCount }}</span>
-            <span>words</span>
+            <span aria-hidden="true">words</span>
+            <span class="sr-only">words</span>
           </div>
         </div>
       </div>
     </header>
 
-    <!-- Content -->
-    <main class="w-full flex flex-col mx-auto max-w-2xl gap-12 px-4 pb-16">
-      <section>
-        <h1 class="text-4xl font-medium mb-8">Hello world.</h1>
+    <!-- Main Content -->
+    <main
+      id="main"
+      class="w-full flex flex-col mx-auto max-w-2xl gap-12 px-4 pb-16"
+    >
+      <article ref="articleRef" aria-labelledby="post-title">
+        <header>
+          <h1 id="post-title" class="text-4xl font-medium mb-8">
+            Hello world.
+          </h1>
+        </header>
 
         <div
           class="text-muted-foreground text-base leading-relaxed flex flex-col gap-6"
@@ -130,12 +119,51 @@ const readTime = computed(() => {
             craft, I hope you’ll find something here that resonates.
           </p>
         </div>
-      </section>
+      </article>
 
       <!-- More -->
-      <section class="flex flex-col items-start gap-4 w-full">
+      <section
+        class="hidden flex-col items-start gap-4 w-full"
+        data-ignore-read
+        aria-label="More writing"
+      >
         <div class="flex-none whitespace-pre">
           <SectionTitle text="more" />
+        </div>
+
+        <div class="flex flex-col w-full">
+          <NuxtLink
+            to="/writing/writing-code-in-the-age-of-ai"
+            class="hover:bg-[#141414] transition-all ease-out duration-200 flex justify-center py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            aria-label="Writing Code in the Age of AI, estimated 3 minute read"
+          >
+            <div class="w-full flex items-center justify-between">
+              <div
+                class="flex flex-col md:grid md:grid-cols-12 w-full items-start md:items-center"
+              >
+                <div class="col-span-2">
+                  <p
+                    class="text-sm text-muted-foreground font-geist tabular-nums"
+                  >
+                    14/02/26
+                  </p>
+                </div>
+
+                <div class="col-span-8">
+                  <p>Writing Code in the Age of AI</p>
+                </div>
+
+                <div
+                  class="col-span-2 flex gap-2 items-center justify-end text-sm text-muted-foreground"
+                >
+                  <Clock :size="15" aria-hidden="true" />
+                  <span class="tabular-nums">3</span>
+                  <span aria-hidden="true">m</span>
+                  <span class="sr-only">minutes</span>
+                </div>
+              </div>
+            </div>
+          </NuxtLink>
         </div>
       </section>
     </main>
