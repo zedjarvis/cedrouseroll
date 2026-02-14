@@ -6,6 +6,13 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-07-15",
   devtools: { enabled: true },
 
+  runtimeConfig: {
+    public: {
+      siteUrl:
+        process.env.NUXT_PUBLIC_SITE_URL || "https://www.cedrouseroll.dev",
+    },
+  },
+
   css: ["~/assets/css/tailwind.css"],
   modules: [
     "@nuxt/a11y",
@@ -46,32 +53,33 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      htmlAttrs: {
-        lang: "en",
-      },
+      htmlAttrs: { lang: "en" },
 
       title: "Cedrouseroll Omondi — Software Engineer & Design Engineer",
-      // titleTemplate: "%s · Cedrouseroll Omondi",
 
       meta: [
+        { charset: "utf-8" },
+        { name: "viewport", content: "width=device-width, initial-scale=1" },
+
         // Core SEO
         {
           name: "description",
           content:
             "Cedrouseroll Omondi is a software and design engineer building thoughtful digital products, exploring UI performance, systems design, and AI-assisted workflows.",
         },
-        {
-          name: "author",
-          content: "Cedrouseroll Omondi",
-        },
+        { name: "author", content: "Cedrouseroll Omondi" },
+        { name: "robots", content: "index, follow" },
+        { name: "googlebot", content: "index, follow" },
 
-        // Mobile / UX
+        // UX / platform
         { name: "theme-color", content: "#0a0a0a" },
         { name: "color-scheme", content: "dark light" },
-        { name: "viewport", content: "width=device-width, initial-scale=1" },
+        { name: "format-detection", content: "telephone=no" },
 
-        // Open Graph (LinkedIn, Facebook, Slack)
+        // Open Graph
         { property: "og:type", content: "website" },
+        { property: "og:site_name", content: "Cedrouseroll Omondi" },
+        { property: "og:locale", content: "en_US" },
         {
           property: "og:title",
           content: "Cedrouseroll Omondi — Software Engineer & Design Engineer",
@@ -81,16 +89,10 @@ export default defineNuxtConfig({
           content:
             "Thoughts, projects, and experiments at the intersection of engineering, design, and systems.",
         },
-        {
-          property: "og:image",
-          content: "/og.png",
-        },
-        {
-          property: "og:url",
-          content: "https://Cedrouseroll.vercel.app",
-        },
+        // IMPORTANT: make image absolute in app.vue where you know siteUrl
+        // Keep this as a fallback only if you want; otherwise set dynamically.
 
-        // Twitter / X
+        // Twitter
         { name: "twitter:card", content: "summary_large_image" },
         {
           name: "twitter:title",
@@ -101,14 +103,13 @@ export default defineNuxtConfig({
           content:
             "Projects, writing, and experiments in modern software and product engineering.",
         },
+        { name: "twitter:image", content: "/og.png" },
         {
-          name: "twitter:image",
-          content: "/og.png",
+          name: "twitter:image:alt",
+          content: "Cedrouseroll Omondi portfolio preview",
         },
-
-        // Search / indexing quality
-        { name: "robots", content: "index, follow" },
-        { name: "googlebot", content: "index, follow" },
+        // Optional if you have a handle:
+        // { name: "twitter:creator", content: "@yourhandle" },
       ],
 
       link: [
@@ -131,16 +132,34 @@ export default defineNuxtConfig({
           href: "/favicon-16x16.png",
         },
 
-        // PWA / Manifest
-        {
-          rel: "manifest",
-          href: "/site.webmanifest",
-        },
+        // PWA
+        { rel: "manifest", href: "/site.webmanifest" },
+      ],
 
-        // Canonical (VERY important for SEO)
+      script: [
+        // JSON-LD (static defaults; canonical/url handled per-route in app.vue)
         {
-          rel: "canonical",
-          href: "https://cedrouseroll.vercel.app",
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: "Cedrouseroll Omondi",
+            jobTitle: "Software Engineer",
+            url: "https://cedrouseroll.dev",
+            sameAs: [
+              "https://github.com/zedjarvis",
+              "https://www.linkedin.com/in/cedrouseroll-omondi-44b119252",
+            ],
+          }),
+        },
+        {
+          type: "application/ld+json",
+          children: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "Cedrouseroll Omondi",
+            url: "https://cedrouseroll.dev",
+          }),
         },
       ],
     },
