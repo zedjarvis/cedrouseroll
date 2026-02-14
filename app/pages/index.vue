@@ -5,77 +5,95 @@ definePageMeta({ name: "Index" });
 
 useSeoMeta({
   title: "Cedrouseroll Omondi - Software Engineer",
+  // We'll do the big SEO pass later; this is a safe baseline.
+  ogTitle: "Cedrouseroll Omondi - Software Engineer",
+  twitterCard: "summary_large_image",
 });
 
-const contactRef = useTemplateRef("contactRef");
+const contactEl = ref<HTMLElement | null>(null);
 const showBlur = ref(true);
+const reduceMotion = ref(false);
+
+let observer: IntersectionObserver | null = null;
 
 onMounted(() => {
-  if (!contactRef.value) return;
+  // Reduced motion users generally shouldn't get dynamic visual effects
+  reduceMotion.value =
+    window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
 
-  const observer = new IntersectionObserver(
+  // If we can't observe, just keep blur off to avoid unnecessary UI work.
+  if (
+    !contactEl.value ||
+    !("IntersectionObserver" in window) ||
+    reduceMotion.value
+  ) {
+    showBlur.value = false;
+    return;
+  }
+
+  observer = new IntersectionObserver(
     ([entry]) => {
-      // Hide blur once contact is visible
-      showBlur.value = !entry.isIntersecting;
+      showBlur.value = !entry?.isIntersecting;
     },
     {
       root: null,
-      threshold: 0.1, // trigger as soon as contact enters view
+      threshold: 0.1,
+      // Start fading earlier so it doesn't pop at the exact moment contact appears
+      rootMargin: "0px 0px -10% 0px",
     },
   );
 
-  observer.observe(contactRef.value);
+  observer.observe(contactEl.value);
+});
 
-  onBeforeUnmount(() => observer.disconnect());
+onBeforeUnmount(() => {
+  observer?.disconnect();
+  observer = null;
 });
 </script>
 
 <template>
-  <div
-    class="flex flex-col items-center w-full min-h-screen bg-background text-foreground"
-  >
-    <!-- Header -->
-    <IndexHeader />
+  <div class="flex min-h-screen w-full flex-col bg-background text-foreground">
+    <!-- Skip link (keyboard + SR users) -->
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-md focus:bg-background focus:px-3 focus:py-2 focus:text-foreground focus:shadow"
+    >
+      Skip to content
+    </a>
 
-    <!-- Main -->
-    <main class="w-full overflow-hidden">
-      <div
-        class="w-full relative flex flex-col gap-10 pb-16 h-full overflow-y-auto"
-      >
-        <!-- 👉 INTRO -->
+    <!-- Header landmark -->
+    <header class="w-full flex justify-center">
+      <IndexHeader />
+    </header>
+
+    <!-- Main landmark -->
+    <main id="main" class="w-full flex-1">
+      <div class="w-full relative flex flex-col gap-10 pb-16 h-full">
+        <!-- Above the fold: keep eager -->
         <IntroSection />
 
-        <!-- 👉 PROJECTS -->
-        <WorkSection />
+        <!-- Below the fold: lazy-load to reduce initial JS + hydration cost -->
+        <LazyWorkSection />
+        <LazyExperienceSection />
+        <LazyTestimonialSection />
+        <LazyStackSection />
+        <LazyVentureSection />
+        <LazyWritingSection />
+        <LazyPersonalSection />
 
-        <!-- 👉 EXPERIENCE -->
-        <ExperienceSection />
-
-        <!-- 👉 TESTIMONIALS -->
-        <TestimonialSection />
-
-        <!-- 👉 STACK -->
-        <StackSection />
-
-        <!-- 👉 VENTURES -->
-        <VentureSection />
-
-        <!-- 👉 WRITING -->
-        <WritingSection />
-
-        <!-- 👉 PERSONAL -->
-        <PersonalSection />
-
-        <!-- 👉 CONTACT -->
-        <div ref="contactRef">
-          <ContactSection />
+        <!-- Contact -->
+        <div ref="contactEl">
+          <LazyContactSection />
         </div>
       </div>
-      <!-- gradual blur -->
     </main>
+
+    <!-- Gradual blur (disabled for reduced motion; also disabled once contact is visible) -->
     <div
       v-if="showBlur"
-      class="fixed bottom-0 left-0 w-full pointer-events-none z-10"
+      class="fixed bottom-0 left-0 z-10 w-full pointer-events-none"
+      aria-hidden="true"
     >
       <GradualBlur
         target="parent"
