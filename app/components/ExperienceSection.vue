@@ -1,7 +1,3 @@
-<script setup lang="ts">
-const srNewTab = " (opens in a new tab)";
-</script>
-
 <template>
   <section
     id="experience"
@@ -90,7 +86,8 @@ const srNewTab = " (opens in a new tab)";
                       height="16"
                       loading="lazy"
                       decoding="async"
-                    />
+                    >
+                    
                   </span>
                   SunCulture
                 </a>

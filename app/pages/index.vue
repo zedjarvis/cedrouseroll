@@ -3,11 +3,31 @@ import { GradualBlur } from "~/components/ui/gradual-blur";
 
 definePageMeta({ name: "Index" });
 
+const config = useRuntimeConfig();
+const siteUrl = config.public.siteUrl;
+const canonicalUrl = `${siteUrl}/`;
+const ogImageUrl = `${siteUrl}/og.png`;
+
 useSeoMeta({
-  title: "Cedrouseroll Omondi - Software Engineer",
-  // We'll do the big SEO pass later; this is a safe baseline.
-  ogTitle: "Cedrouseroll Omondi - Software Engineer",
+  title: "Cedrouseroll Omondi — Software Engineer",
+  description:
+    "Software engineer building secure systems, performant user interfaces, and reliable API infrastructure.",
+  ogTitle: "Cedrouseroll Omondi — Software Engineer",
+  ogDescription:
+    "Selected work, writing, and experience focused on performance, accessibility, and product delivery.",
+  ogType: "website",
+  ogUrl: canonicalUrl,
+  ogImage: ogImageUrl,
+  ogImageAlt: "Cedrouseroll Omondi portfolio preview",
   twitterCard: "summary_large_image",
+  twitterTitle: "Cedrouseroll Omondi — Software Engineer",
+  twitterDescription:
+    "Selected work, writing, and experience focused on performance, accessibility, and product delivery.",
+  twitterImage: ogImageUrl,
+});
+
+useHead({
+  link: [{ rel: "canonical", href: canonicalUrl }],
 });
 
 const contactEl = ref<HTMLElement | null>(null);
