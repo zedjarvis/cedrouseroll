@@ -2,6 +2,13 @@
 import { Maximize, SquareArrowOutUpRight } from "lucide-vue-next";
 import { DotGrid } from "~/components/ui/dot-grid";
 import { AnimatedModal, AnimatedModalBody } from "./ui/animated-modal";
+import {
+  clampOffset,
+  createOffsetMap,
+  getKeyboardStep,
+  isWorkCardControlKey,
+  type Offset,
+} from "~/lib/workSection";
 
 const breakpoints = useBreakpoints({ sm: 640, md: 768, lg: 1024, xl: 1280 });
 const isMobile = breakpoints.smaller("sm"); // < 640px
@@ -81,11 +88,11 @@ function openModal(project: Project) {
  */
 const STORAGE_KEY = "work:dragOffsets:v1";
 
-type Offsets = Record<string, { x: number; y: number }>;
+type Offsets = Record<string, Offset>;
 const offsets = reactive<Offsets>({});
 
 function loadOffsets() {
-  if (!process.client) return;
+  if (!import.meta.client) return;
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return;
@@ -99,7 +106,7 @@ function loadOffsets() {
 }
 
 function saveOffsets() {
-  if (!process.client) return;
+  if (!import.meta.client) return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(offsets));
   } catch {
@@ -131,6 +138,7 @@ const start = reactive({
 const reduceMotion = ref(false);
 
 onMounted(() => {
+  Object.assign(offsets, createOffsetMap(projects.map((project) => project.id)));
   loadOffsets();
   reduceMotion.value =
     window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
@@ -150,15 +158,12 @@ function clampWithinCanvas(el: HTMLElement, nextX: number, nextY: number) {
   const minY = canvasRect.top - elRect.top;
   const maxY = canvasRect.bottom - elRect.bottom;
 
-  return {
-    x: Math.min(Math.max(nextX, minX), maxX),
-    y: Math.min(Math.max(nextY, minY), maxY),
-  };
+  return clampOffset({ x: nextX, y: nextY }, { minX, maxX, minY, maxY });
 }
 
 function onPointerDown(e: PointerEvent, projectId: string) {
   // Only enable dragging on md+ layouts (mobile is stacked)
-  if (!process.client) return;
+  if (!import.meta.client) return;
   if (window.matchMedia("(min-width: 768px)").matches === false) return;
 
   // Only left click / primary touch
@@ -215,6 +220,19 @@ function nudge(
   const clamped = clampWithinCanvas(el, off.x + deltaX, off.y + deltaY);
   offsets[projectId] = clamped;
   saveOffsets();
+}
+
+function handleCardKeydown(event: KeyboardEvent, projectId: string) {
+  if (!isWorkCardControlKey(event.key)) return;
+  event.preventDefault();
+
+  const el = event.currentTarget as HTMLElement;
+  const step = getKeyboardStep(event.shiftKey);
+  if (event.key === "ArrowLeft") nudge(projectId, -step, 0, el);
+  if (event.key === "ArrowRight") nudge(projectId, step, 0, el);
+  if (event.key === "ArrowUp") nudge(projectId, 0, -step, el);
+  if (event.key === "ArrowDown") nudge(projectId, 0, step, el);
+  if (event.key === "Escape") resetPosition(projectId);
 }
 </script>
 
@@ -281,15 +299,15 @@ function nudge(
       <div
         class="relative flex flex-col items-center gap-6 md:block w-full h-min md:h-94 md:max-w-275"
       >
-        <p class="sr-only" id="work-drag-help">
+        <p id="work-drag-help" class="sr-only">
           On desktop, you can drag project cards within this section. Focus a
           card and use arrow keys to nudge it; hold Shift for bigger steps.
         </p>
 
-        <div
-          v-for="(project, idx) in projects"
-          :key="project.id"
-          class="md:absolute"
+          <div
+            v-for="project in projects"
+            :key="project.id"
+            class="md:absolute"
           :class="[project.posClass, project.zClass]"
         >
           <!-- Drag wrapper: translate only, no default positioning changes -->
@@ -310,17 +328,7 @@ function nudge(
             @pointerup="(e) => onPointerUp(e, project.id)"
             @pointercancel="(e) => onPointerUp(e, project.id)"
             @dblclick.stop="resetPosition(project.id)"
-            @keydown.prevent="
-              ($event) => {
-                const el = $event.currentTarget as HTMLElement;
-                const step = $event.shiftKey ? 12 : 4;
-                if ($event.key === 'ArrowLeft') nudge(project.id, -step, 0, el);
-                if ($event.key === 'ArrowRight') nudge(project.id, step, 0, el);
-                if ($event.key === 'ArrowUp') nudge(project.id, 0, -step, el);
-                if ($event.key === 'ArrowDown') nudge(project.id, 0, step, el);
-                if ($event.key === 'Escape') resetPosition(project.id);
-              }
-            "
+            @keydown="(event) => handleCardKeydown(event, project.id)"
           >
             <!-- Visual card (keeps your hover scale + rotation) -->
             <div
@@ -335,7 +343,7 @@ function nudge(
               <button
                 type="button"
                 class="absolute hidden group-hover:flex group-focus-within:flex items-center justify-center h-9 w-9 bg-[#1c1c1c] hover:bg-[#222] rounded-full top-2 right-2 text-muted-foreground transition z-10"
-                :aria-label="`Open preview for project ${idx + 1}`"
+                :aria-label="`Open preview for ${project.alt}`"
                 @pointerdown.stop
                 @click.stop="openModal(project)"
               >
@@ -343,12 +351,15 @@ function nudge(
               </button>
 
               <div class="absolute inset-0 z-0">
-                <img
+                <NuxtImg
                   :src="project.image"
                   :alt="project.alt"
+                  width="320"
+                  height="248"
                   class="w-full h-full object-cover"
                   loading="lazy"
-                  decoding="async"
+                  densities="x1"
+                  format="webp"
                   draggable="false"
                 />
               </div>
@@ -362,12 +373,15 @@ function nudge(
     <AnimatedModal v-model:open="isModalOpen">
       <AnimatedModalBody :lock-scroll="true">
         <div v-if="activeProject">
-          <img
+          <NuxtImg
             :src="activeProject.image"
             :alt="activeProject.alt"
+            width="1280"
+            height="900"
             class="w-full h-auto"
             loading="eager"
-            decoding="async"
+            densities="x1"
+            format="webp"
           />
 
           <p
@@ -381,7 +395,7 @@ function nudge(
               target="_blank"
               rel="noopener noreferrer"
               class="inline-flex items-center"
-              :aria-label="`Open project in a new tab: ${activeProject.link}`"
+              :aria-label="`Open ${activeProject.alt} in a new tab`"
             >
               <SquareArrowOutUpRight :size="16" aria-hidden="true" />
             </NuxtLink>
