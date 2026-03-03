@@ -31,11 +31,12 @@ if (!modal) {
   throw new Error("AnimatedModalBody must be used within <AnimatedModal>");
 }
 
-const panelRef = ref<any>(null);
+type PanelRef = HTMLElement | { $el?: HTMLElement } | null;
+const panelRef = ref<PanelRef>(null);
 const previousActive = ref<HTMLElement | null>(null);
 
 const getPanelEl = (): HTMLElement | null => {
-  const raw = panelRef.value as any;
+  const raw = panelRef.value;
   if (!raw) return null;
   if (raw instanceof HTMLElement) return raw;
   if (raw.$el instanceof HTMLElement) return raw.$el;
@@ -59,6 +60,50 @@ const closeIfOutside = (event: Event) => {
 };
 
 const scrollLock = useScrollLock(import.meta.client ? document.body : null);
+
+function getFocusableEls(container: HTMLElement) {
+  return Array.from(
+    container.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), textarea:not([disabled]), input:not([disabled]), select:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    ),
+  ).filter((el) => !el.hasAttribute("disabled") && el.tabIndex !== -1);
+}
+
+function onDocumentKeydown(event: KeyboardEvent) {
+  if (!modal.open.value) return;
+
+  if (event.key === "Escape") {
+    event.preventDefault();
+    modal.closeModal();
+    return;
+  }
+
+  if (event.key !== "Tab") return;
+
+  const panel = getPanelEl();
+  if (!panel) return;
+
+  const focusables = getFocusableEls(panel);
+  if (focusables.length === 0) {
+    event.preventDefault();
+    panel.focus();
+    return;
+  }
+
+  const first = focusables[0];
+  const last = focusables[focusables.length - 1];
+  const active = document.activeElement as HTMLElement | null;
+
+  if (!event.shiftKey && active === last) {
+    event.preventDefault();
+    first.focus();
+  }
+
+  if (event.shiftKey && active === first) {
+    event.preventDefault();
+    last.focus();
+  }
+}
 
 watch(
   () => modal.open.value,
@@ -91,6 +136,7 @@ if (import.meta.client) {
     if (!modal.open.value) return;
     closeIfOutside(e);
   });
+  useEventListener(document, "keydown", onDocumentKeydown);
 }
 
 onBeforeUnmount(() => {
