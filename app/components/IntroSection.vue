@@ -181,9 +181,9 @@ watch(copied, (value) => {
         />
       </span>
       where I build and shape the product from architecture to interface,
-      focusing on making it simple, performant and scalable. I'm constantly
-      exploring how AI can improve both developer workflows and the end user's
-      experience.
+      focusing on making the platform simple, performant and scalable. I'm
+      constantly exploring how AI can improve both developer workflows and the
+      end user's experience.
     </p>
 
     <div id="email-shortcut">
