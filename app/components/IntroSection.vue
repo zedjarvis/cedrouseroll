@@ -146,7 +146,7 @@ watch(copied, (value) => {
 
     <!-- Keep server-rendered for SEO; only LinkPreview might need ClientOnly -->
     <p class="text-[#8f8f8f] tracking-wide leading-6">
-      Hey, I'm Ced, a lead Engineer at
+      Hey, I'm Ced, a Lead Engineer at
       <ClientOnly>
         <LinkPreview url="https://www.schoolbooks.ke">
           <span class="text-foreground">Schoolbooks </span>
@@ -180,9 +180,10 @@ watch(copied, (value) => {
           class="h-3.5 w-auto rounded"
         />
       </span>
-      where I specialize in building secure, stateless APIs and backend systems
-      with a strong focus on performance, accessibility, simplicity and
-      reliability.
+      where I build and shape the product from architecture to interface,
+      focusing on making the platform simple, performant and scalable. I'm
+      constantly exploring how AI can improve both developer workflows and the
+      end user's experience.
     </p>
 
     <div id="email-shortcut">
