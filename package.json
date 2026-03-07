@@ -1,7 +1,13 @@
 {
   "name": "cedrouseroll",
   "type": "module",
+  "version": "0.0.1",
   "private": true,
+  "author": {
+    "name": "Cedrouseroll Omondi",
+    "email": "omondicedo@gmail.com",
+    "url": "https://www.cedrouseroll.dev"
+  },
   "scripts": {
     "build": "nuxt build",
     "bump": "bumpp --all --tag --commit \"chore(release): v%s\"",
