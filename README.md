@@ -1,4 +1,5 @@
 # Cedrouseroll Omondi — Portfolio
+[![Coverage](https://codecov.io/gh/zedjarvis/cedrouseroll/graph/badge.svg)](https://codecov.io/gh/zedjarvis/cedrouseroll)
 
 This is my personal portfolio website built with **Nuxt 4**, **Vue 3**, **TailwindCSS**, and **shadcn-vue**.
 
@@ -72,6 +73,18 @@ Preview production build locally:
 ```bash
 npm run preview
 ```
+
+---
+
+## Test Coverage
+
+Run coverage locally:
+
+```bash
+pnpm test:coverage -- --run
+```
+
+Coverage is uploaded in CI (GitHub Actions) and reflected in the badge at the top of this README.
 
 ---
 
