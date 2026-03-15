@@ -1,0 +1,231 @@
+import { defineComponent, nextTick, ref } from "vue";
+import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import AppRoot from "~/app.vue";
+import IndexPage from "~/pages/index.vue";
+import HelloWorldPage from "~/pages/writing/hello-world.vue";
+import DraftPage from "~/pages/writing/writing-code-in-the-age-of-ai.vue";
+
+const {
+  colorModeState,
+  useHeadSpy,
+  useSeoMetaSpy,
+  definePageMetaSpy,
+  computeFromElSpy,
+} = vi.hoisted(() => ({
+  colorModeState: { preference: "light" },
+  useHeadSpy: vi.fn(),
+  useSeoMetaSpy: vi.fn(),
+  definePageMetaSpy: vi.fn(),
+  computeFromElSpy: vi.fn(),
+}));
+
+mockNuxtImport("useColorMode", () => {
+  return () => colorModeState;
+});
+
+mockNuxtImport("useHead", () => useHeadSpy);
+mockNuxtImport("useSeoMeta", () => useSeoMetaSpy);
+mockNuxtImport("definePageMeta", () => definePageMetaSpy);
+mockNuxtImport("useRuntimeConfig", () => {
+  return () => ({
+    app: { baseURL: "/" },
+    public: { siteUrl: "https://www.cedrouseroll.dev" },
+  });
+});
+mockNuxtImport("useReadStats", () => {
+  return () => ({
+    wordCount: ref(120),
+    readTime: ref(2),
+    computeFromEl: computeFromElSpy,
+  });
+});
+
+const AppStub = defineComponent({
+  template: "<div><slot /></div>",
+});
+
+const LinkStub = defineComponent({
+  props: { to: { type: String, default: "" } },
+  template: '<a :href="to"><slot /></a>',
+});
+
+describe("app shell and pages", () => {
+  beforeEach(() => {
+    colorModeState.preference = "light";
+    useHeadSpy.mockReset();
+    useSeoMetaSpy.mockReset();
+    definePageMetaSpy.mockReset();
+    computeFromElSpy.mockReset();
+    vi.restoreAllMocks();
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("forces dark mode at the app root and sets root html class", async () => {
+    const wrapper = await mountSuspended(AppRoot, {
+      global: {
+        stubs: {
+          Toaster: AppStub,
+          NuxtRouteAnnouncer: AppStub,
+          NuxtLoadingIndicator: AppStub,
+          NuxtLayout: AppStub,
+          NuxtPage: AppStub,
+        },
+      },
+    });
+
+    expect(colorModeState.preference).toBe("dark");
+    expect(useHeadSpy).toHaveBeenCalledWith({
+      htmlAttrs: {
+        class: "dark",
+      },
+    });
+    expect(wrapper.classes()).toContain("min-h-screen");
+  });
+
+  it("keeps the index page metadata in sync and disconnects its observer", async () => {
+    let observerCallback:
+      | ((entries: Array<{ isIntersecting: boolean }>) => void)
+      | null = null;
+    const disconnect = vi.fn();
+
+    class MockIntersectionObserver {
+      constructor(cb: (entries: Array<{ isIntersecting: boolean }>) => void) {
+        observerCallback = cb;
+      }
+
+      observe = vi.fn();
+      disconnect = disconnect;
+    }
+
+    vi.stubGlobal("IntersectionObserver", MockIntersectionObserver as never);
+    vi.spyOn(window, "matchMedia").mockImplementation(
+      (query: string) =>
+        ({
+          matches: false,
+          media: query,
+          onchange: null,
+          addListener: vi.fn(),
+          removeListener: vi.fn(),
+          addEventListener: vi.fn(),
+          removeEventListener: vi.fn(),
+          dispatchEvent: vi.fn(),
+        }) as MediaQueryList,
+    );
+
+    const wrapper = await mountSuspended(IndexPage, {
+      shallow: true,
+      global: {
+        stubs: {
+          GradualBlur: defineComponent({
+            template: '<div data-testid="blur" />',
+          }),
+          IndexHeader: AppStub,
+          IntroSection: AppStub,
+          LazyWorkSection: AppStub,
+          LazyExperienceSection: AppStub,
+          LazyTestimonialSection: AppStub,
+          LazyStackSection: AppStub,
+          LazyVentureSection: AppStub,
+          LazyWritingSection: AppStub,
+          LazyPersonalSection: AppStub,
+          LazyContactSection: AppStub,
+        },
+      },
+    });
+
+    expect(definePageMetaSpy).toHaveBeenCalledWith({ name: "Index" });
+    expect(useSeoMetaSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ogUrl: "https://www.cedrouseroll.dev/",
+        twitterImage: "https://www.cedrouseroll.dev/og.png",
+      }),
+    );
+    expect(useHeadSpy).toHaveBeenCalledWith({
+      link: [{ rel: "canonical", href: "https://www.cedrouseroll.dev/" }],
+    });
+    expect(wrapper.find('a[href="#main"]').exists()).toBe(true);
+    expect(wrapper.find('[data-testid="blur"]').exists()).toBe(true);
+
+    observerCallback?.([{ isIntersecting: true }]);
+    await nextTick();
+
+    expect(wrapper.find('[data-testid="blur"]').exists()).toBe(false);
+
+    wrapper.unmount();
+    expect(disconnect).toHaveBeenCalledTimes(1);
+  });
+
+  it("renders the published article and attaches article metadata", async () => {
+    const wrapper = await mountSuspended(HelloWorldPage, {
+      global: {
+        stubs: {
+          NuxtLink: LinkStub,
+          CornerDownLeft: AppStub,
+          Clock: AppStub,
+          TextAlignStart: AppStub,
+        },
+      },
+    });
+
+    expect(computeFromElSpy).toHaveBeenCalledTimes(1);
+    expect(useSeoMetaSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ogType: "article",
+        ogUrl: "https://www.cedrouseroll.dev/writing/hello-world",
+      }),
+    );
+    expect(useHeadSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        link: [
+          {
+            rel: "canonical",
+            href: "https://www.cedrouseroll.dev/writing/hello-world",
+          },
+        ],
+      }),
+    );
+    expect(wrapper.text()).toContain("Hello world.");
+    expect(wrapper.text()).toContain("JAN 26, 2026");
+    expect(wrapper.find('a[href="/"]').exists()).toBe(true);
+  });
+
+  it("renders the draft article with noindex metadata", async () => {
+    const wrapper = await mountSuspended(DraftPage, {
+      global: {
+        stubs: {
+          NuxtLink: LinkStub,
+          CornerDownLeft: AppStub,
+          Clock: AppStub,
+          TextAlignStart: AppStub,
+          SectionTitle: defineComponent({
+            props: { text: { type: String, required: true } },
+            template: "<h2>{{ text }}</h2>",
+          }),
+        },
+      },
+    });
+
+    expect(computeFromElSpy).toHaveBeenCalledTimes(1);
+    expect(useSeoMetaSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        robots: "noindex, nofollow",
+        googlebot: "noindex, nofollow",
+      }),
+    );
+    expect(useHeadSpy).toHaveBeenCalledWith({
+      link: [
+        {
+          rel: "canonical",
+          href: "https://www.cedrouseroll.dev/writing/writing-code-in-the-age-of-ai",
+        },
+      ],
+    });
+    expect(wrapper.text()).toContain("Writing Code in the Age of AI.");
+    expect(wrapper.text()).toContain("Hello World");
+    expect(wrapper.find('a[href="/writing/hello-world"]').exists()).toBe(true);
+  });
+});
