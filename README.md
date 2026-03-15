@@ -9,6 +9,20 @@ Live: **<https://cedrouseroll.dev>**
 
 ---
 
+## Prerequisites
+
+- **Node.js 22+**
+- **pnpm** (recommended via Corepack)
+
+Enable Corepack and activate pnpm:
+
+```bash
+corepack enable
+corepack prepare pnpm@latest --activate
+```
+
+---
+
 ## Tech Stack
 
 - **Nuxt 4** (Vue 3)
@@ -39,7 +53,7 @@ Live: **<https://cedrouseroll.dev>**
 Install dependencies:
 
 ```bash
-npm install
+pnpm install
 ```
 
 ---
@@ -49,7 +63,7 @@ npm install
 Start the dev server:
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 App runs on:
@@ -65,13 +79,13 @@ http://localhost:3000
 Build for production:
 
 ```bash
-npm run build
+pnpm build
 ```
 
 Preview production build locally:
 
 ```bash
-npm run preview
+pnpm preview
 ```
 
 ---
@@ -90,13 +104,40 @@ Coverage is uploaded in CI (GitHub Actions) and reflected in the badge at the to
 
 ## Environment Variables
 
-Create a `.env` file:
+Create a `.env` file (or copy from `.env.example` if you keep one):
 
 ```env
 NUXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NUXT_PUBLIC_SUPABASE_KEY=your_supabase_key
 NUXT_PUBLIC_SITE_URL=https://cedrouseroll.dev
 ```
+
+The contact form requires Supabase public URL/key to be present.
+
+---
+
+## Available Scripts
+
+```bash
+pnpm dev            # start local dev server
+pnpm build          # production build
+pnpm preview        # preview production build
+pnpm test           # run all tests
+pnpm test:watch     # test in watch mode
+pnpm test:coverage  # coverage run
+pnpm test:unit      # unit project tests
+pnpm test:nuxt      # nuxt project tests
+pnpm commit         # interactive conventional commit (Commitizen)
+pnpm changelog      # regenerate CHANGELOG.md from commits
+pnpm release        # changelog + version bump flow
+```
+
+---
+
+## Contributing
+
+Please read [contribution.md](./contribution.md) before opening a PR.
+This project uses Husky hooks and commitlint, so commit messages must follow Conventional Commits.
 
 ---
 

@@ -27,7 +27,7 @@ const ventures: Venture[] = [
     id: "nudge",
     name: "Nu-dge",
     tagline: "AI project manager for my everyday tasks",
-    href: "https://www.schoolbooks.ke",
+    href: "https://nu-dge.vercel.app",
     iconType: "image",
     imageSrc: "/images/nu.png",
     imageAlt: "Nu-dge logo",
