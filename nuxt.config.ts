@@ -30,6 +30,7 @@ export default defineNuxtConfig({
   supabase: {
     url: process.env.NUXT_PUBLIC_SUPABASE_URL,
     key: process.env.NUXT_PUBLIC_SUPABASE_KEY,
+    types: false,
     redirect: false,
   },
   shadcn: {
@@ -38,6 +39,20 @@ export default defineNuxtConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      include: [
+        "lucide-vue-next",
+        "vue-sonner",
+        "clsx",
+        "tailwind-merge",
+        "class-variance-authority",
+        "mathjs",
+        "reka-ui",
+        "motion-v",
+        "gsap",
+        "gsap/InertiaPlugin",
+      ],
+    },
   },
   colorMode: {
     classSuffix: "",
@@ -145,7 +160,7 @@ export default defineNuxtConfig({
             "@type": "Person",
             name: "Cedrouseroll Omondi",
             jobTitle: "Software Engineer",
-            url: "https://cedrouseroll.dev",
+            url: "https://www.cedrouseroll.dev",
             sameAs: [
               "https://github.com/zedjarvis",
               "https://www.linkedin.com/in/cedrouseroll-omondi-44b119252",
@@ -158,7 +173,7 @@ export default defineNuxtConfig({
             "@context": "https://schema.org",
             "@type": "WebSite",
             name: "Cedrouseroll Omondi",
-            url: "https://cedrouseroll.dev",
+            url: "https://www.cedrouseroll.dev",
           }),
         },
       ],
