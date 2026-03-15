@@ -5,7 +5,7 @@ This is my personal portfolio website built with **Nuxt 4**, **Vue 3**, **Tailwi
 
 It includes my selected work, experience, writing, and a contact form powered by Supabase.
 
-Live: **<https://cedrouseroll.dev>**
+Live: **<https://www.cedrouseroll.dev>**
 
 ---
 
@@ -109,7 +109,7 @@ Create a `.env` file (or copy from `.env.example` if you keep one):
 ```env
 NUXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NUXT_PUBLIC_SUPABASE_KEY=your_supabase_key
-NUXT_PUBLIC_SITE_URL=https://cedrouseroll.dev
+NUXT_PUBLIC_SITE_URL=https://www.cedrouseroll.dev
 ```
 
 The contact form requires Supabase public URL/key to be present.

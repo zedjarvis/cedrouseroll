@@ -16,7 +16,7 @@ pnpm install
 pnpm dev
 ```
 
-Run tests before committing:
+Run tests before pushing:
 
 ```bash
 pnpm test
@@ -52,7 +52,7 @@ pnpm commit
 
 Local hooks:
 
-- `pre-commit`: runs `pnpm test`
+- `pre-push`: runs `pnpm test`
 - `commit-msg`: runs `pnpm exec commitlint --edit "$1"`
 
 If your commit message format is invalid, the commit will be rejected.
