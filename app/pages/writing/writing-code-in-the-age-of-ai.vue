@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { CornerDownLeft, Clock, TextAlignStart } from "lucide-vue-next";
 
+const config = useRuntimeConfig();
+const siteUrl = config.public.siteUrl.replace(/\/$/, "");
+const canonicalUrl = `${siteUrl}/writing/writing-code-in-the-age-of-ai`;
+
 useSeoMeta({
   title: "Writing Code in the Age of AI by Cedrouseroll Omondi",
   description:
@@ -9,6 +13,12 @@ useSeoMeta({
   ogDescription:
     "A personal reflection on balancing AI tools like Copilot with real developer thinking, learning, and problem solving.",
   twitterCard: "summary_large_image",
+  robots: "noindex, nofollow",
+  googlebot: "noindex, nofollow",
+});
+
+useHead({
+  link: [{ rel: "canonical", href: canonicalUrl }],
 });
 
 const articleRef = ref<HTMLElement | null>(null);

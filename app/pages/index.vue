@@ -11,10 +11,10 @@ const ogImageUrl = `${siteUrl}/og.png`;
 useSeoMeta({
   title: "Cedrouseroll Omondi — Software Engineer",
   description:
-    "Software engineer building secure systems, performant user interfaces, and reliable API infrastructure.",
+    "Nairobi-based software engineer building secure APIs, performant web interfaces, and reliable product systems.",
   ogTitle: "Cedrouseroll Omondi — Software Engineer",
   ogDescription:
-    "Selected work, writing, and experience focused on performance, accessibility, and product delivery.",
+    "Selected software engineering work, writing, and experience focused on performance, accessibility, and product delivery.",
   ogType: "website",
   ogUrl: canonicalUrl,
   ogImage: ogImageUrl,
@@ -22,8 +22,9 @@ useSeoMeta({
   twitterCard: "summary_large_image",
   twitterTitle: "Cedrouseroll Omondi — Software Engineer",
   twitterDescription:
-    "Selected work, writing, and experience focused on performance, accessibility, and product delivery.",
+    "Selected software engineering work, writing, and experience focused on performance, accessibility, and product delivery.",
   twitterImage: ogImageUrl,
+  twitterImageAlt: "Cedrouseroll Omondi portfolio preview",
 });
 
 useHead({

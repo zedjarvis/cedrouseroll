@@ -15,6 +15,7 @@ const isMobile = breakpoints.smaller("sm"); // < 640px
 
 type Project = {
   id: string;
+  name: string;
   image: string;
   description: string;
   link: string;
@@ -28,6 +29,7 @@ type Project = {
 const projects: Project[] = [
   {
     id: "sb",
+    name: "SchoolBooks Accounting",
     image: "/images/sb.jpg",
     alt: "Schoolbooks platform screenshot",
     description:
@@ -39,6 +41,7 @@ const projects: Project[] = [
   },
   {
     id: "haft",
+    name: "Haft Studio",
     image: "/images/portfolio.jpg",
     alt: "Haft Studio website screenshot",
     description:
@@ -50,6 +53,7 @@ const projects: Project[] = [
   },
   {
     id: "meskith",
+    name: "Meskith Studio",
     image: "/images/meskith.jpg",
     alt: "Meskith Studio landing page screenshot",
     description:
@@ -61,6 +65,7 @@ const projects: Project[] = [
   },
   {
     id: "compare",
+    name: "Vue 3 Compare Image",
     image: "/images/portfolio2.jpg",
     alt: "Vue3 compare image component screenshot",
     description:
@@ -253,7 +258,7 @@ function handleCardKeydown(event: KeyboardEvent, projectId: string) {
         </div>
         <div class="contents">
           <SectionDescription
-            text="Below are some select projects, full walkthrough on request"
+            text="Selected software engineering projects across school SaaS, brand websites, landing pages, and open-source Vue tooling. Full walkthroughs are available on request."
           />
         </div>
       </div>
@@ -384,22 +389,27 @@ function handleCardKeydown(event: KeyboardEvent, projectId: string) {
             format="webp"
           />
 
-          <p
-            class="p-4 flex justify-center text-center text-muted-foreground text-sm leading-relaxed gap-2 items-center"
-          >
-            <span>{{ activeProject.description }}</span>
-
-            <NuxtLink
-              external
-              :to="activeProject.link"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="inline-flex items-center"
-              :aria-label="`Open ${activeProject.alt} in a new tab`"
+          <div class="p-4 text-center">
+            <p class="text-sm font-medium text-foreground">
+              {{ activeProject.name }}
+            </p>
+            <p
+              class="mt-2 flex justify-center text-center text-muted-foreground text-sm leading-relaxed gap-2 items-center"
             >
-              <SquareArrowOutUpRight :size="16" aria-hidden="true" />
-            </NuxtLink>
-          </p>
+              <span>{{ activeProject.description }}</span>
+
+              <NuxtLink
+                external
+                :to="activeProject.link"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center"
+                :aria-label="`Open ${activeProject.name} in a new tab`"
+              >
+                <SquareArrowOutUpRight :size="16" aria-hidden="true" />
+              </NuxtLink>
+            </p>
+          </div>
         </div>
       </AnimatedModalBody>
     </AnimatedModal>
