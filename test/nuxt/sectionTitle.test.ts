@@ -1,8 +1,18 @@
 import { mountSuspended } from "@nuxt/test-utils/runtime";
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import SectionTitle from "~/components/SectionTitle.vue";
 
 describe("SectionTitle", () => {
+  beforeEach(() => {
+    vi.stubGlobal("__NUXT_COLOR_MODE__", {
+      preference: "light",
+      value: "light",
+      getColorScheme: () => "light",
+      addColorScheme: vi.fn(),
+      removeColorScheme: vi.fn(),
+    });
+  });
+
   it("renders text with default paragraph tag", async () => {
     const wrapper = await mountSuspended(SectionTitle, {
       props: { text: "Work" },
