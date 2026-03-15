@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { CornerDownLeft, Clock, TextAlignStart } from "lucide-vue-next";
 
+const config = useRuntimeConfig();
+const siteUrl = config.public.siteUrl.replace(/\/$/, "");
+const canonicalUrl = `${siteUrl}/writing/hello-world`;
+const ogImageUrl = `${siteUrl}/og.png`;
+
 useSeoMeta({
   title: "Hello World by Cedrouseroll Omondi",
   description:
@@ -8,7 +13,46 @@ useSeoMeta({
   ogTitle: "Hello World — Cedrouseroll Omondi",
   ogDescription:
     "A short intro post on writing, learning, and building as a software engineer.",
+  ogType: "article",
+  ogUrl: canonicalUrl,
+  ogImage: ogImageUrl,
+  ogImageAlt: "Cedrouseroll Omondi portfolio preview",
   twitterCard: "summary_large_image",
+  twitterTitle: "Hello World — Cedrouseroll Omondi",
+  twitterDescription:
+    "A short intro post on writing, learning, and building as a software engineer.",
+  twitterImage: ogImageUrl,
+  twitterImageAlt: "Cedrouseroll Omondi portfolio preview",
+});
+
+useHead({
+  link: [{ rel: "canonical", href: canonicalUrl }],
+  script: [
+    {
+      type: "application/ld+json",
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        headline: "Hello World",
+        description:
+          "A short intro post on writing, learning, and building as a software engineer.",
+        datePublished: "2026-01-26",
+        dateModified: "2026-01-26",
+        author: {
+          "@type": "Person",
+          name: "Cedrouseroll Omondi",
+          url: siteUrl,
+        },
+        mainEntityOfPage: canonicalUrl,
+        image: [ogImageUrl],
+        publisher: {
+          "@type": "Person",
+          name: "Cedrouseroll Omondi",
+          url: siteUrl,
+        },
+      }),
+    },
+  ],
 });
 
 const articleRef = ref<HTMLElement | null>(null);
@@ -121,51 +165,6 @@ onMounted(async () => {
         </div>
       </article>
 
-      <!-- More -->
-      <section
-        class="hidden flex-col items-start gap-4 w-full"
-        data-ignore-read
-        aria-label="More writing"
-      >
-        <div class="flex-none whitespace-pre">
-          <SectionTitle text="more" />
-        </div>
-
-        <div class="flex flex-col w-full">
-          <NuxtLink
-            to="/writing/writing-code-in-the-age-of-ai"
-            class="hover:bg-[#141414] transition-all ease-out duration-200 flex justify-center py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            aria-label="Writing Code in the Age of AI, estimated 3 minute read"
-          >
-            <div class="w-full flex items-center justify-between">
-              <div
-                class="flex flex-col md:grid md:grid-cols-12 w-full items-start md:items-center"
-              >
-                <div class="col-span-2">
-                  <p
-                    class="text-sm text-muted-foreground font-geist tabular-nums"
-                  >
-                    14/02/26
-                  </p>
-                </div>
-
-                <div class="col-span-8">
-                  <p>Writing Code in the Age of AI</p>
-                </div>
-
-                <div
-                  class="col-span-2 flex gap-2 items-center justify-end text-sm text-muted-foreground"
-                >
-                  <Clock :size="15" aria-hidden="true" />
-                  <span class="tabular-nums">3</span>
-                  <span aria-hidden="true">m</span>
-                  <span class="sr-only">minutes</span>
-                </div>
-              </div>
-            </div>
-          </NuxtLink>
-        </div>
-      </section>
     </main>
   </div>
 </template>
