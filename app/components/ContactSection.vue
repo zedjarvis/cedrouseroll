@@ -42,10 +42,32 @@ const isValid = computed(
   () => !errors.value.name && !errors.value.email && !errors.value.message,
 );
 
+function focusFirstInvalidField() {
+  if (!import.meta.client) return;
+
+  if (errors.value.name) {
+    document.getElementById("name")?.focus();
+    return;
+  }
+
+  if (errors.value.email) {
+    document.getElementById("email")?.focus();
+    return;
+  }
+
+  if (errors.value.message) {
+    document.getElementById("message")?.focus();
+  }
+}
+
 /* ---------------- submit ---------------- */
 const sendMessage = async () => {
   hasSubmitted.value = true;
-  if (!isValid.value || isSubmitting.value) return;
+  if (!isValid.value || isSubmitting.value) {
+    await nextTick();
+    focusFirstInvalidField();
+    return;
+  }
 
   isSubmitting.value = true;
 
@@ -127,7 +149,7 @@ function mailtoHref() {
                 v-model="name"
                 name="name"
                 autocomplete="name"
-                placeholder="Name"
+                placeholder="Name…"
                 class="h-10.5 w-full rounded-lg"
                 :aria-invalid="hasSubmitted && errors.name ? 'true' : 'false'"
                 :aria-describedby="
@@ -149,7 +171,7 @@ function mailtoHref() {
                 type="email"
                 inputmode="email"
                 autocomplete="email"
-                placeholder="Email"
+                placeholder="Email…"
                 class="h-10.5 w-full rounded-lg"
                 :aria-invalid="hasSubmitted && errors.email ? 'true' : 'false'"
                 :aria-describedby="
@@ -168,7 +190,7 @@ function mailtoHref() {
                 id="message"
                 v-model="message"
                 name="message"
-                placeholder="Message"
+                placeholder="Message…"
                 class="w-full min-h-50 rounded-lg resize-none"
                 :aria-invalid="
                   hasSubmitted && errors.message ? 'true' : 'false'
@@ -219,7 +241,7 @@ function mailtoHref() {
       <!-- Email (now a real link) -->
       <a
         :href="mailtoHref()"
-        class="hover:bg-[#141414] transition-all ease-out duration-200 flex justify-center py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        class="flex justify-center py-2 transition-all duration-200 ease-out hover:bg-accent/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         :aria-label="`Email ${CONTACT_EMAIL}`"
       >
         <div
@@ -243,7 +265,7 @@ function mailtoHref() {
         target="_blank"
         rel="noopener noreferrer"
         to="https://www.linkedin.com/in/cedrouseroll-omondi-44b119252"
-        class="hover:bg-[#141414] transition-all ease-out duration-200 flex justify-center py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        class="flex justify-center py-2 transition-all duration-200 ease-out hover:bg-accent/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         aria-label="LinkedIn profile (opens in a new tab)"
       >
         <div
@@ -267,7 +289,7 @@ function mailtoHref() {
         to="https://github.com/zedjarvis"
         target="_blank"
         rel="noopener noreferrer"
-        class="hover:bg-[#141414] transition-all ease-out duration-200 flex justify-center py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        class="flex justify-center py-2 transition-all duration-200 ease-out hover:bg-accent/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         aria-label="GitHub profile (opens in a new tab)"
       >
         <div
@@ -290,7 +312,7 @@ function mailtoHref() {
     <div class="flex justify-center items-center w-full mt-6">
       <img
         src="/images/sig.svg"
-        class="w-60"
+        class="w-60 invert transition-[filter,opacity] duration-200 dark:invert-0"
         alt=""
         loading="lazy"
         decoding="async"

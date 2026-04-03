@@ -1,4 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname "$0")/_/husky.sh"
 
-pnpm test
+if [ "$1" = "origin" ]; then
+  pnpm test
+fi

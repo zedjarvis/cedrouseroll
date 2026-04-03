@@ -10,7 +10,7 @@ defineProps<{
   <component
     :is="as ?? 'p'"
     :id="id"
-    class="text-[#8f8f8f] tracking-wide leading-6"
+    class="text-muted-foreground tracking-wide leading-6"
   >
     {{ text }}
   </component>

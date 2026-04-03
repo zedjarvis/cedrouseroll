@@ -51,7 +51,7 @@ const testimonials: Testimonial[] = [
             <figure
               class="flex flex-col justify-between gap-8 p-5 w-97.5 border rounded-xl shadow-sm bg-background hover:shadow-md transition-shadow"
             >
-              <blockquote class="text-sm leading-relaxed text-[#8f8f8f]">
+              <blockquote class="text-sm leading-relaxed text-muted-foreground">
                 <span class="sr-only">Testimonial: </span>
                 “{{ t.quote }}”
               </blockquote>
@@ -66,6 +66,9 @@ const testimonials: Testimonial[] = [
                       :src="t.authorAvatarSrc"
                       :alt="t.authorAvatarAlt ?? ''"
                       class="h-full w-full object-cover"
+                      :class="{
+                        'invert dark:invert-0': t.authorAvatarSrc === '/images/gpt.svg',
+                      }"
                       width="44"
                       height="44"
                       loading="lazy"

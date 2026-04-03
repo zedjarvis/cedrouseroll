@@ -9,26 +9,104 @@ const canonicalUrl = `${siteUrl}/`;
 const ogImageUrl = `${siteUrl}/og.png`;
 
 useSeoMeta({
-  title: "Cedrouseroll Omondi — Software Engineer",
+  title: "Cedrouseroll Omondi | Full-Stack Software Engineer in Nairobi, Kenya",
   description:
-    "Nairobi-based software engineer building secure APIs, performant web interfaces, and reliable product systems.",
-  ogTitle: "Cedrouseroll Omondi — Software Engineer",
+    "Cedrouseroll Omondi is a full-stack software engineer in Nairobi, Kenya building SaaS platforms, secure APIs, internal tools, and high-performance web products for startups and growing teams.",
+  ogTitle: "Cedrouseroll Omondi | Full-Stack Software Engineer in Nairobi, Kenya",
   ogDescription:
-    "Selected software engineering work, writing, and experience focused on performance, accessibility, and product delivery.",
+    "Full-stack software engineer in Nairobi building scalable SaaS products, secure APIs, fast frontends, and reliable product systems.",
   ogType: "website",
   ogUrl: canonicalUrl,
   ogImage: ogImageUrl,
   ogImageAlt: "Cedrouseroll Omondi portfolio preview",
   twitterCard: "summary_large_image",
-  twitterTitle: "Cedrouseroll Omondi — Software Engineer",
+  twitterTitle:
+    "Cedrouseroll Omondi | Full-Stack Software Engineer in Nairobi, Kenya",
   twitterDescription:
-    "Selected software engineering work, writing, and experience focused on performance, accessibility, and product delivery.",
+    "Full-stack software engineer in Nairobi building scalable SaaS products, secure APIs, fast frontends, and reliable product systems.",
   twitterImage: ogImageUrl,
   twitterImageAlt: "Cedrouseroll Omondi portfolio preview",
 });
 
 useHead({
   link: [{ rel: "canonical", href: canonicalUrl }],
+  script: [
+    {
+      type: "application/ld+json",
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        name: "Cedrouseroll Omondi | Full-Stack Software Engineer in Nairobi, Kenya",
+        url: canonicalUrl,
+        description:
+          "Portfolio of Cedrouseroll Omondi, a full-stack software engineer in Nairobi, Kenya building SaaS products, APIs, internal tools, and performant web experiences.",
+        mainEntity: {
+          "@type": "Person",
+          name: "Cedrouseroll Omondi",
+          url: canonicalUrl,
+          image: `${siteUrl}/images/ced.jpeg`,
+          jobTitle: "Full-Stack Software Engineer",
+          description:
+            "Full-stack software engineer in Nairobi, Kenya building SaaS platforms, internal tools, secure APIs, and accessible product experiences.",
+          address: {
+            "@type": "PostalAddress",
+            addressLocality: "Nairobi",
+            addressCountry: "KE",
+          },
+          knowsAbout: [
+            "Full-stack software development",
+            "Software engineering",
+            "API development",
+            "SaaS product development",
+            "Vue.js",
+            "Nuxt",
+            "Laravel",
+            "Product engineering",
+            "Performance optimization",
+            "Accessibility",
+          ],
+          sameAs: [
+            "https://github.com/zedjarvis",
+            "https://www.linkedin.com/in/cedrouseroll-omondi-44b119252",
+          ],
+        },
+      }),
+    },
+    {
+      type: "application/ld+json",
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        name: "Featured software engineering projects",
+        itemListElement: [
+          {
+            "@type": "ListItem",
+            position: 1,
+            name: "SchoolBooks Accounting",
+            url: "https://www.schoolbooks.ke",
+          },
+          {
+            "@type": "ListItem",
+            position: 2,
+            name: "Haft Studio",
+            url: "https://haftstudio-website.vercel.app",
+          },
+          {
+            "@type": "ListItem",
+            position: 3,
+            name: "Meskith Studio",
+            url: "http://meskith.com",
+          },
+          {
+            "@type": "ListItem",
+            position: 4,
+            name: "Vue 3 Compare Image",
+            url: "https://vue3-compare-image.vercel.app",
+          },
+        ],
+      }),
+    },
+  ],
 });
 
 const contactEl = ref<HTMLElement | null>(null);

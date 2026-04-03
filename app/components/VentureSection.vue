@@ -50,6 +50,9 @@ const ventures: Venture[] = [
         <div class="flex-none whitespace-pre">
           <SectionTitle id="ventures-title" text="Ventures" />
         </div>
+        <SectionDescription
+          text="Software products and startup experiments I’m building around productivity, business operations, and practical AI workflows."
+        />
       </header>
     </div>
 
@@ -62,7 +65,7 @@ const ventures: Venture[] = [
           target="_blank"
           rel="noopener noreferrer"
           :to="v.href"
-          class="hover:bg-[#141414] transition-all ease-out duration-200 flex justify-center py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          class="flex justify-center py-1 transition-all duration-200 ease-out hover:bg-accent/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           :aria-label="`${v.name} (opens in a new tab)`"
         >
           <div

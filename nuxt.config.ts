@@ -55,6 +55,8 @@ export default defineNuxtConfig({
     },
   },
   colorMode: {
+    preference: "system",
+    fallback: "light",
     classSuffix: "",
   },
   // image: {
@@ -70,7 +72,7 @@ export default defineNuxtConfig({
     head: {
       htmlAttrs: { lang: "en" },
 
-      title: "Cedrouseroll Omondi — Software Engineer & Design Engineer",
+      title: "Cedrouseroll Omondi | Full-Stack Software Engineer in Nairobi, Kenya",
 
       meta: [
         { charset: "utf-8" },
@@ -80,7 +82,7 @@ export default defineNuxtConfig({
         {
           name: "description",
           content:
-            "Cedrouseroll Omondi is a software and design engineer building thoughtful digital products, exploring UI performance, systems design, and AI-assisted workflows.",
+            "Cedrouseroll Omondi is a full-stack software engineer in Nairobi, Kenya building SaaS products, secure APIs, internal tools, and high-performance web applications.",
         },
         { name: "author", content: "Cedrouseroll Omondi" },
         { name: "robots", content: "index, follow" },
@@ -97,12 +99,13 @@ export default defineNuxtConfig({
         { property: "og:locale", content: "en_US" },
         {
           property: "og:title",
-          content: "Cedrouseroll Omondi — Software Engineer & Design Engineer",
+          content:
+            "Cedrouseroll Omondi | Full-Stack Software Engineer in Nairobi, Kenya",
         },
         {
           property: "og:description",
           content:
-            "Thoughts, projects, and experiments at the intersection of engineering, design, and systems.",
+            "Full-stack software engineer in Nairobi building scalable SaaS products, secure APIs, fast frontends, and reliable product systems.",
         },
         // IMPORTANT: make image absolute in app.vue where you know siteUrl
         // Keep this as a fallback only if you want; otherwise set dynamically.
@@ -111,12 +114,13 @@ export default defineNuxtConfig({
         { name: "twitter:card", content: "summary_large_image" },
         {
           name: "twitter:title",
-          content: "Cedrouseroll Omondi — Software Engineer",
+          content:
+            "Cedrouseroll Omondi | Full-Stack Software Engineer in Nairobi, Kenya",
         },
         {
           name: "twitter:description",
           content:
-            "Projects, writing, and experiments in modern software and product engineering.",
+            "Full-stack software engineer in Nairobi building scalable SaaS products, secure APIs, fast frontends, and reliable product systems.",
         },
         { name: "twitter:image", content: "/og.png" },
         {
@@ -159,8 +163,26 @@ export default defineNuxtConfig({
             "@context": "https://schema.org",
             "@type": "Person",
             name: "Cedrouseroll Omondi",
-            jobTitle: "Software Engineer",
+            jobTitle: "Full-Stack Software Engineer",
             url: "https://www.cedrouseroll.dev",
+            description:
+              "Full-stack software engineer in Nairobi, Kenya building SaaS platforms, secure APIs, internal tools, and accessible web products.",
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Nairobi",
+              addressCountry: "KE",
+            },
+            knowsAbout: [
+              "Software engineering",
+              "Full-stack development",
+              "API development",
+              "SaaS product development",
+              "Vue.js",
+              "Nuxt",
+              "Laravel",
+              "Accessibility",
+              "Performance optimization",
+            ],
             sameAs: [
               "https://github.com/zedjarvis",
               "https://www.linkedin.com/in/cedrouseroll-omondi-44b119252",

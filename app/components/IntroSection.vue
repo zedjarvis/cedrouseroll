@@ -140,12 +140,14 @@ watch(copied, (value) => {
           </span>
         </div>
 
-        <p class="text-sm text-[#8f8f8f] font-medium">Software Engineer</p>
+        <p class="text-sm text-muted-foreground font-medium">
+          Full-Stack Software Engineer
+        </p>
       </div>
     </div>
 
     <!-- Keep server-rendered for SEO; only LinkPreview might need ClientOnly -->
-    <p class="text-[#8f8f8f] tracking-wide leading-6">
+    <p class="text-muted-foreground tracking-wide leading-6">
       Hey, I'm Ced, a Lead Engineer at
       <ClientOnly>
         <LinkPreview url="https://www.schoolbooks.ke">
@@ -187,7 +189,7 @@ watch(copied, (value) => {
     </p>
 
     <div id="email-shortcut">
-      <p class="text-[#8f8f8f]">
+      <p class="text-muted-foreground">
         Press
         <Button
           variant="outline"

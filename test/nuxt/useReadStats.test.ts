@@ -1,7 +1,25 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { useReadStats } from "~/composables/useReadStats";
 
+vi.stubGlobal("__NUXT_COLOR_MODE__", {
+  preference: "system",
+  value: "light",
+  getColorScheme: () => "light",
+  addColorScheme: vi.fn(),
+  removeColorScheme: vi.fn(),
+});
+
 describe("useReadStats", () => {
+  beforeEach(() => {
+    vi.stubGlobal("__NUXT_COLOR_MODE__", {
+      preference: "system",
+      value: "light",
+      getColorScheme: () => "light",
+      addColorScheme: vi.fn(),
+      removeColorScheme: vi.fn(),
+    });
+  });
+
   it("counts words and computes default read time", () => {
     const { wordCount, readTime, computeFromEl } = useReadStats();
     const el = document.createElement("article");

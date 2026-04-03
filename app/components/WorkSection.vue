@@ -12,6 +12,7 @@ import {
 
 const breakpoints = useBreakpoints({ sm: 640, md: 768, lg: 1024, xl: 1280 });
 const isMobile = breakpoints.smaller("sm"); // < 640px
+const colorMode = useColorMode();
 
 type Project = {
   id: string;
@@ -79,6 +80,10 @@ const projects: Project[] = [
 
 const activeProject = ref<Project | null>(null);
 const isModalOpen = ref(false);
+const hoveredId = ref<string | null>(null);
+const resetHintId = ref<string | null>(null);
+const RESET_HINT_DELAY_MS = 700;
+let resetHintTimer: ReturnType<typeof window.setTimeout> | null = null;
 
 function openModal(project: Project) {
   activeProject.value = project;
@@ -124,8 +129,14 @@ function ensureOffset(id: string) {
   return offsets[id];
 }
 
+function hasMoved(projectId: string) {
+  const off = ensureOffset(projectId);
+  return off.x !== 0 || off.y !== 0;
+}
+
 function resetPosition(projectId: string) {
   offsets[projectId] = { x: 0, y: 0 };
+  if (resetHintId.value === projectId) resetHintId.value = null;
   saveOffsets();
 }
 
@@ -138,9 +149,49 @@ const start = reactive({
   startY: 0,
   origX: 0,
   origY: 0,
+  minX: Number.NEGATIVE_INFINITY,
+  maxX: Number.POSITIVE_INFINITY,
+  minY: Number.NEGATIVE_INFINITY,
+  maxY: Number.POSITIVE_INFINITY,
 });
 
 const reduceMotion = ref(false);
+const dotGridBaseColor = computed(() =>
+  colorMode.value === "dark" ? "#6b7280" : "#9ca3af",
+);
+const dotGridActiveColor = computed(() =>
+  colorMode.value === "dark" ? "#d1d5db" : "#374151",
+);
+
+function isRaised(projectId: string) {
+  return draggingId.value === projectId || hoveredId.value === projectId;
+}
+
+function clearResetHintTimer() {
+  if (resetHintTimer) {
+    clearTimeout(resetHintTimer);
+    resetHintTimer = null;
+  }
+}
+
+function scheduleResetHint(projectId: string) {
+  clearResetHintTimer();
+  resetHintId.value = null;
+
+  if (!hasMoved(projectId) || draggingId.value === projectId) return;
+
+  resetHintTimer = window.setTimeout(() => {
+    if (hoveredId.value === projectId && hasMoved(projectId)) {
+      resetHintId.value = projectId;
+    }
+    resetHintTimer = null;
+  }, RESET_HINT_DELAY_MS);
+}
+
+function clearResetHint(projectId?: string) {
+  clearResetHintTimer();
+  if (!projectId || resetHintId.value === projectId) resetHintId.value = null;
+}
 
 onMounted(() => {
   Object.assign(offsets, createOffsetMap(projects.map((project) => project.id)));
@@ -149,21 +200,47 @@ onMounted(() => {
     window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
 });
 
-function clampWithinCanvas(el: HTMLElement, nextX: number, nextY: number) {
+onBeforeUnmount(() => {
+  clearResetHint();
+});
+
+function getCanvasBounds(el: HTMLElement, currentOffset: Offset) {
   const canvas = canvasEl.value;
-  if (!canvas) return { x: nextX, y: nextY };
+  if (!canvas) {
+    return {
+      minX: Number.NEGATIVE_INFINITY,
+      maxX: Number.POSITIVE_INFINITY,
+      minY: Number.NEGATIVE_INFINITY,
+      maxY: Number.POSITIVE_INFINITY,
+    };
+  }
 
   const canvasRect = canvas.getBoundingClientRect();
   const elRect = el.getBoundingClientRect();
 
-  // If we move by (dx, dy), the rect becomes:
-  // left+dx, top+dy. We clamp so it stays inside the canvas.
-  const minX = canvasRect.left - elRect.left;
-  const maxX = canvasRect.right - elRect.right;
-  const minY = canvasRect.top - elRect.top;
-  const maxY = canvasRect.bottom - elRect.bottom;
+  const baseLeft = elRect.left - currentOffset.x;
+  const baseRight = elRect.right - currentOffset.x;
+  const baseTop = elRect.top - currentOffset.y;
+  const baseBottom = elRect.bottom - currentOffset.y;
 
-  return clampOffset({ x: nextX, y: nextY }, { minX, maxX, minY, maxY });
+  return {
+    minX: canvasRect.left - baseLeft,
+    maxX: canvasRect.right - baseRight,
+    minY: canvasRect.top - baseTop,
+    maxY: canvasRect.bottom - baseBottom,
+  };
+}
+
+function clampToStartBounds(nextX: number, nextY: number) {
+  return clampOffset(
+    { x: nextX, y: nextY },
+    {
+      minX: start.minX,
+      maxX: start.maxX,
+      minY: start.minY,
+      maxY: start.maxY,
+    },
+  );
 }
 
 function onPointerDown(e: PointerEvent, projectId: string) {
@@ -178,6 +255,8 @@ function onPointerDown(e: PointerEvent, projectId: string) {
   if (!target) return;
 
   draggingId.value = projectId;
+  hoveredId.value = projectId;
+  clearResetHint(projectId);
   const off = ensureOffset(projectId);
 
   start.pointerId = e.pointerId;
@@ -185,6 +264,7 @@ function onPointerDown(e: PointerEvent, projectId: string) {
   start.startY = e.clientY;
   start.origX = off.x;
   start.origY = off.y;
+  Object.assign(start, getCanvasBounds(target, off));
 
   target.setPointerCapture(e.pointerId);
 }
@@ -199,12 +279,7 @@ function onPointerMove(e: PointerEvent, projectId: string) {
   const dx = e.clientX - start.startX;
   const dy = e.clientY - start.startY;
 
-  const nextX = start.origX + dx;
-  const nextY = start.origY + dy;
-
-  const clamped = clampWithinCanvas(target, nextX, nextY);
-
-  offsets[projectId] = clamped;
+  offsets[projectId] = clampToStartBounds(start.origX + dx, start.origY + dy);
 }
 
 function onPointerUp(e: PointerEvent, projectId: string) {
@@ -212,6 +287,11 @@ function onPointerUp(e: PointerEvent, projectId: string) {
   if (e.pointerId !== start.pointerId) return;
 
   draggingId.value = null;
+  if (hoveredId.value === projectId) {
+    scheduleResetHint(projectId);
+  } else {
+    clearResetHint(projectId);
+  }
   saveOffsets();
 }
 
@@ -222,12 +302,23 @@ function nudge(
   el: HTMLElement,
 ) {
   const off = ensureOffset(projectId);
-  const clamped = clampWithinCanvas(el, off.x + deltaX, off.y + deltaY);
+  const bounds = getCanvasBounds(el, off);
+  const clamped = clampOffset(
+    { x: off.x + deltaX, y: off.y + deltaY },
+    bounds,
+  );
   offsets[projectId] = clamped;
   saveOffsets();
 }
 
 function handleCardKeydown(event: KeyboardEvent, projectId: string) {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    const project = projects.find((item) => item.id === projectId);
+    if (project) openModal(project);
+    return;
+  }
+
   if (!isWorkCardControlKey(event.key)) return;
   event.preventDefault();
 
@@ -258,7 +349,7 @@ function handleCardKeydown(event: KeyboardEvent, projectId: string) {
         </div>
         <div class="contents">
           <SectionDescription
-            text="Selected software engineering projects across school SaaS, brand websites, landing pages, and open-source Vue tooling. Full walkthroughs are available on request."
+            text="Selected full-stack software engineering projects across SaaS, internal tools, brand websites, landing pages, and open-source Vue tooling. The work covers product engineering, API development, frontend performance, and scalable web systems."
           />
         </div>
       </div>
@@ -286,8 +377,8 @@ function handleCardKeydown(event: KeyboardEvent, projectId: string) {
             v-if="!reduceMotion"
             :dot-size="3"
             :gap="12"
-            base-color="#8f8f8f"
-            active-color="#8f8f8f"
+            :base-color="dotGridBaseColor"
+            :active-color="dotGridActiveColor"
             :proximity="100"
             :speed-trigger="150"
             :shock-radius="250"
@@ -309,65 +400,78 @@ function handleCardKeydown(event: KeyboardEvent, projectId: string) {
           card and use arrow keys to nudge it; hold Shift for bigger steps.
         </p>
 
-          <div
-            v-for="project in projects"
-            :key="project.id"
-            class="md:absolute"
-          :class="[project.posClass, project.zClass]"
+        <div
+          v-for="project in projects"
+          :key="project.id"
+          class="group w-full max-w-80 select-none touch-none md:absolute md:w-auto md:max-w-none"
+          :class="[
+            project.posClass,
+            project.zClass,
+            'will-change-transform',
+            draggingId === project.id ? 'cursor-grabbing' : 'cursor-grab',
+          ]"
+          :style="{
+            transform: `translate3d(${ensureOffset(project.id).x}px, ${ensureOffset(project.id).y}px, 0)`,
+            ...(isRaised(project.id) ? { zIndex: 20 } : {}),
+          }"
+          role="button"
+          tabindex="0"
+          :aria-label="`Open ${project.name} project preview. Arrow keys move the card, Enter opens details.`"
+          :aria-describedby="'work-drag-help'"
+          @pointerdown="(e) => onPointerDown(e, project.id)"
+          @pointermove="(e) => onPointerMove(e, project.id)"
+          @pointerup="(e) => onPointerUp(e, project.id)"
+          @pointercancel="(e) => onPointerUp(e, project.id)"
+          @mouseenter="
+            hoveredId = project.id;
+            scheduleResetHint(project.id);
+          "
+          @mouseleave="
+            hoveredId = draggingId === project.id ? project.id : null;
+            clearResetHint(project.id);
+          "
+          @dblclick.stop="resetPosition(project.id)"
+          @keydown="(event) => handleCardKeydown(event, project.id)"
         >
-          <!-- Drag wrapper: translate only, no default positioning changes -->
+          <!-- Visual card (keeps your hover scale + rotation) -->
           <div
-            class="group select-none touch-none"
+            class="relative bg-white border-white border-4 border-solid w-80 h-62 rounded-lg overflow-hidden p-1 shadow-md transition-[transform,box-shadow] duration-300 ease-out group-hover:scale-[1.08] focus-visible:scale-[1.08] outline-none"
             :class="[
-              'will-change-transform',
-              draggingId === project.id ? 'cursor-grabbing' : 'cursor-grab',
+              project.rotateClass,
+              'md:group-hover:rotate-0 md:focus-visible:rotate-0 transition-transform duration-300 ease-out',
+              'focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
             ]"
-            :style="{
-              transform: `translate3d(${ensureOffset(project.id).x}px, ${ensureOffset(project.id).y}px, 0)`,
-            }"
-            role="group"
-            tabindex="0"
-            :aria-describedby="'work-drag-help'"
-            @pointerdown="(e) => onPointerDown(e, project.id)"
-            @pointermove="(e) => onPointerMove(e, project.id)"
-            @pointerup="(e) => onPointerUp(e, project.id)"
-            @pointercancel="(e) => onPointerUp(e, project.id)"
-            @dblclick.stop="resetPosition(project.id)"
-            @keydown="(event) => handleCardKeydown(event, project.id)"
           >
-            <!-- Visual card (keeps your hover scale + rotation) -->
-            <div
-              class="relative bg-white border-white border-4 border-solid w-80 h-62 shadow-md rounded-lg overflow-hidden p-1 transition-all duration-300 ease-out group-hover:scale-[1.08] focus-visible:scale-[1.08] outline-none"
-              :class="[
-                project.rotateClass,
-                'md:group-hover:rotate-0 md:focus-visible:rotate-0 transition-transform duration-300 ease-out',
-                'focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-              ]"
+            <!-- Open modal button (not hover-only; also appears on focus) -->
+            <button
+              type="button"
+              class="absolute top-2 right-2 z-10 flex h-9 w-9 items-center justify-center rounded-full border border-border/80 bg-background/90 text-foreground opacity-0 shadow-sm transition-[background-color,color,opacity,transform] group-hover:opacity-100 group-focus-within:opacity-100 hover:bg-accent focus-visible:opacity-100"
+              :aria-label="`Open preview for ${project.alt}`"
+              @pointerdown.stop
+              @click.stop="openModal(project)"
             >
-              <!-- Open modal button (not hover-only; also appears on focus) -->
-              <button
-                type="button"
-                class="absolute hidden group-hover:flex group-focus-within:flex items-center justify-center h-9 w-9 bg-[#1c1c1c] hover:bg-[#222] rounded-full top-2 right-2 text-muted-foreground transition z-10"
-                :aria-label="`Open preview for ${project.alt}`"
-                @pointerdown.stop
-                @click.stop="openModal(project)"
-              >
-                <Maximize :size="18" aria-hidden="true" />
-              </button>
+              <Maximize :size="18" aria-hidden="true" />
+            </button>
 
-              <div class="absolute inset-0 z-0">
-                <NuxtImg
-                  :src="project.image"
-                  :alt="project.alt"
-                  width="320"
-                  height="248"
-                  class="w-full h-full object-cover"
-                  loading="lazy"
-                  densities="x1"
-                  format="webp"
-                  draggable="false"
-                />
-              </div>
+            <div class="absolute inset-0 z-0">
+              <NuxtImg
+                :src="project.image"
+                :alt="project.alt"
+                width="320"
+                height="248"
+                class="w-full h-full object-cover"
+                loading="lazy"
+                densities="x1"
+                format="webp"
+                draggable="false"
+              />
+            </div>
+
+            <div
+              v-if="resetHintId === project.id"
+              class="pointer-events-none absolute left-1/2 top-3 z-20 -translate-x-1/2 rounded-full border border-border/80 bg-background/95 px-3 py-1 text-[11px] font-medium tracking-[0.01em] text-foreground shadow-sm backdrop-blur-sm"
+            >
+              Double click to reset
             </div>
           </div>
         </div>

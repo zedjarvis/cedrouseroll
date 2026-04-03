@@ -1,7 +1,16 @@
 <script setup lang="ts">
-import { Clock } from "lucide-vue-next";
+import { Clock, Moon, Sun } from "lucide-vue-next";
 
 const timeText = ref("");
+const colorMode = useColorMode();
+
+const currentThemeIcon = computed(() =>
+  colorMode.value === "dark" ? Moon : Sun,
+);
+
+const currentThemeLabel = computed(() =>
+  colorMode.value === "dark" ? "dark" : "light",
+);
 
 // Cache formatter (faster than building options each tick)
 const formatter = new Intl.DateTimeFormat("en-US", {
@@ -38,6 +47,10 @@ function onVisibilityChange() {
   else stop();
 }
 
+function toggleTheme() {
+  colorMode.preference = colorMode.value === "dark" ? "light" : "dark";
+}
+
 onMounted(() => {
   start();
   document.addEventListener("visibilitychange", onVisibilityChange, {
@@ -57,8 +70,10 @@ onBeforeUnmount(() => {
       <!-- keep alt="" so it isn't announced -->
       <img
         src="/images/signature.svg"
-        class="h-7"
+        class="block h-7 w-auto invert transition-[filter,opacity] duration-200 dark:invert-0"
         alt=""
+        width="255"
+        height="200"
         loading="eager"
         decoding="async"
       />
@@ -74,6 +89,15 @@ onBeforeUnmount(() => {
 
       <!-- Provide a stable, SR-friendly equivalent (updates only on mount) -->
       <span class="sr-only"> Current time in Nairobi: {{ timeText }} </span>
+
+      <button
+        type="button"
+        class="flex h-7 w-7 items-center justify-center rounded-full text-muted-foreground transition hover:bg-accent hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        :aria-label="`Current theme: ${currentThemeLabel}. Toggle theme.`"
+        @click="toggleTheme"
+      >
+        <component :is="currentThemeIcon" :size="16" aria-hidden="true" />
+      </button>
     </div>
   </div>
 </template>
