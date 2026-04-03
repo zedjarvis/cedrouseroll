@@ -54,6 +54,12 @@ describe("content sections", () => {
     expect(wrapper.text()).toContain("Lead Engineer at");
     expect(wrapper.text()).toContain("Full-Stack Engineer at");
     expect(wrapper.text()).toContain("Software Developer at");
+    expect(wrapper.text()).toContain(
+      "Experience building production software for startups and operating teams",
+    );
+    expect(wrapper.text()).toContain(
+      "Leading full-stack engineering across backend systems, frontend architecture, and API design",
+    );
     expect(
       wrapper.find('a[href="/cedrouseroll_omondi_fullstack_developer_cv.pdf"]').exists(),
     ).toBe(true);
@@ -72,6 +78,9 @@ describe("content sections", () => {
 
     expect(wrapper.text()).toContain("SchoolBooks Accounting");
     expect(wrapper.text()).toContain("Nu-dge");
+    expect(wrapper.text()).toContain(
+      "Software products and startup experiments I’m building around productivity, business operations, and practical AI workflows.",
+    );
     expect(wrapper.find('a[href="https://www.schoolbooks.ke"]').exists()).toBe(
       true,
     );
