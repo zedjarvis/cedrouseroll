@@ -113,4 +113,12 @@ describe("IntroSection", () => {
     );
     expect(copyMock.mock.calls.length).toBe(callsAfterPlainC);
   });
+
+  it("renders the updated role and location copy", async () => {
+    const wrapper = await mountIntro();
+
+    expect(wrapper.text()).toContain("Full-Stack Software Engineer");
+    expect(wrapper.text()).toContain("Lead Engineer at");
+    expect(wrapper.text()).toContain("Nairobi, Kenya");
+  });
 });
