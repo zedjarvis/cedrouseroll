@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { CSSProperties } from "vue";
-import { computed, reactive, ref } from "vue";
+import { computed, onBeforeUnmount, onMounted, reactive, ref } from "vue";
 
 interface BaseProps {
   class?: string;
@@ -37,6 +37,8 @@ const isVisible = ref(false);
 const isLoading = ref(true);
 const preview = ref<HTMLElement | null>(null);
 const hasPopped = ref(false);
+const reduceMotion = ref(false);
+let popTimer: number | null = null;
 
 // Generate preview URL
 const previewSrc = computed(() => {
@@ -106,7 +108,14 @@ function handleMouseMove(event: MouseEvent) {
 
 function showPreview() {
   isVisible.value = true;
-  setTimeout(() => {
+  if (popTimer !== null) window.clearTimeout(popTimer);
+
+  if (reduceMotion.value) {
+    hasPopped.value = false;
+    return;
+  }
+
+  popTimer = window.setTimeout(() => {
     hasPopped.value = true;
   }, 50);
 }
@@ -114,11 +123,24 @@ function showPreview() {
 function hidePreview() {
   isVisible.value = false;
   hasPopped.value = false;
+  if (popTimer !== null) {
+    window.clearTimeout(popTimer);
+    popTimer = null;
+  }
 }
 
 function handleImageLoad() {
   isLoading.value = false;
 }
+
+onMounted(() => {
+  reduceMotion.value =
+    window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+});
+
+onBeforeUnmount(() => {
+  if (popTimer !== null) window.clearTimeout(popTimer);
+});
 </script>
 
 <template>
@@ -129,11 +151,13 @@ function handleImageLoad() {
     <!-- Trigger -->
     <NuxtLink
       :to="url"
-      class="text-black dark:text-white"
+      class="text-foreground"
       :class="[props.linkClass]"
       @mousemove="handleMouseMove"
       @mouseenter="showPreview"
       @mouseleave="hidePreview"
+      @focus="showPreview"
+      @blur="hidePreview"
     >
       <slot />
     </NuxtLink>
@@ -150,7 +174,7 @@ function handleImageLoad() {
         :class="[popClass, { 'transform-gpu': !props.isStatic }]"
       >
         <div
-          class="block rounded-xl border-2 border-transparent bg-white p-1 shadow-lg dark:bg-gray-900"
+          class="block rounded-xl border border-border bg-popover p-1 shadow-lg"
         >
           <img
             :src="previewSrc"

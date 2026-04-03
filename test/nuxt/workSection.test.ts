@@ -1,10 +1,19 @@
 import { defineComponent, ref } from "vue";
 import { mockNuxtImport, mountSuspended } from "@nuxt/test-utils/runtime";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import WorkSection from "~/components/WorkSection.vue";
 
-const { breakpointState } = vi.hoisted(() => {
-  return { breakpointState: { isMobile: false } };
+const { breakpointState, colorModeGlobalState } = vi.hoisted(() => {
+  return {
+    breakpointState: { isMobile: false },
+    colorModeGlobalState: {
+      preference: "system",
+      value: "light",
+      getColorScheme: () => "light",
+      addColorScheme: vi.fn(),
+      removeColorScheme: vi.fn(),
+    },
+  };
 });
 
 mockNuxtImport("useBreakpoints", () => {
@@ -59,8 +68,10 @@ const mountWork = () =>
 
 describe("WorkSection", () => {
   beforeEach(() => {
+    vi.useFakeTimers();
     localStorage.clear();
     breakpointState.isMobile = false;
+    vi.stubGlobal("__NUXT_COLOR_MODE__", colorModeGlobalState);
     vi.restoreAllMocks();
     vi.spyOn(window, "matchMedia").mockImplementation(
       (query: string) =>
@@ -77,6 +88,10 @@ describe("WorkSection", () => {
     );
   });
 
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
   it("loads persisted offsets on mount and applies translate style", async () => {
     localStorage.setItem(
       "work:dragOffsets:v1",
@@ -84,7 +99,7 @@ describe("WorkSection", () => {
     );
 
     const wrapper = await mountWork();
-    const firstCard = wrapper.get('[role="group"]');
+    const firstCard = wrapper.get('[role="button"]');
 
     expect(firstCard.attributes("style")).toContain("translate3d(9px, -4px, 0)");
   });
@@ -96,7 +111,7 @@ describe("WorkSection", () => {
     );
 
     const wrapper = await mountWork();
-    const firstCard = wrapper.get('[role="group"]');
+    const firstCard = wrapper.get('[role="button"]');
 
     await firstCard.trigger("keydown", { key: "Escape" });
 
@@ -115,5 +130,38 @@ describe("WorkSection", () => {
       "An all-in-one, user-first, AI-enabled platform designed to simplify school accounting and management.",
     );
     expect(wrapper.find('a[href="https://www.schoolbooks.ke"]').exists()).toBe(true);
+  });
+
+  it("lifts the active card above the stack on hover and resets on leave", async () => {
+    const wrapper = await mountWork();
+    const firstCard = wrapper.get('[role="button"]');
+    const positionedCard = firstCard.element as HTMLElement;
+
+    expect(positionedCard.style.zIndex).toBe("");
+
+    await firstCard.trigger("mouseenter");
+    expect(positionedCard.style.zIndex).toBe("20");
+
+    await firstCard.trigger("mouseleave");
+    expect(positionedCard.style.zIndex).toBe("");
+  });
+
+  it("shows a delayed reset hint for moved cards on hover", async () => {
+    localStorage.setItem(
+      "work:dragOffsets:v1",
+      JSON.stringify({ sb: { x: 12, y: 0 } }),
+    );
+
+    const wrapper = await mountWork();
+    const firstCard = wrapper.get('[role="button"]');
+
+    await firstCard.trigger("mouseenter");
+    expect(wrapper.text()).not.toContain("Double click to reset");
+
+    await vi.advanceTimersByTimeAsync(700);
+    expect(wrapper.text()).toContain("Double click to reset");
+
+    await firstCard.trigger("mouseleave");
+    expect(wrapper.text()).not.toContain("Double click to reset");
   });
 });

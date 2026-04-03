@@ -5,7 +5,7 @@
     stroke-dasharray: 3500; 
     stroke-dashoffset: 3500;
     animation: write-signature 8s ease-in-out forwards infinite;
-    stroke: #1a1a1a; /* Default light mode color */
+    stroke: #fdfdfd;
   }
 
   @keyframes write-signature {
@@ -22,13 +22,6 @@
     100% {
       stroke-dashoffset: 0;
       opacity: 0;
-    }
-  }
-
-  /* Adaptive color for Dark Mode */
-  @media (prefers-color-scheme: dark) {
-    .signature-path {
-      stroke: #fdfdfd;
     }
   }
 

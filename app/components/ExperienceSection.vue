@@ -11,7 +11,7 @@
       <header class="flex flex-col gap-4 w-full">
         <SectionTitle id="experience-title" text="experience" />
         <SectionDescription
-          text="I’ve had the opportunity to work with teams across different environments, contributing to products at various stages—from early builds to production systems. Here's a brief overview."
+          text="Experience building production software for startups and operating teams across backend systems, APIs, internal tools, frontend architecture, and product delivery."
         />
       </header>
 
@@ -46,10 +46,10 @@
                 </a>
               </p>
 
-              <p class="text-[#8f8f8f] text-sm w-full">
-                Leading backend, Frontend + API work, shaping secure school
-                financial and admin systems and internal tools for core ops and
-                financial flows.
+              <p class="text-muted-foreground text-sm w-full">
+                Leading full-stack engineering across backend systems, frontend
+                architecture, and API design for secure school finance,
+                administration, and internal operations software.
               </p>
             </div>
           </div>
@@ -93,9 +93,10 @@
                 </a>
               </p>
 
-              <p class="text-[#8f8f8f] text-sm w-full">
-                Built internal systems, secure APIs, and commission flows—plus
-                architecture reviews and cross-team delivery.
+              <p class="text-muted-foreground text-sm w-full">
+                Built internal systems, secure APIs, and commission flows, while
+                contributing to architecture reviews and cross-team product
+                delivery.
               </p>
             </div>
           </div>
@@ -130,9 +131,10 @@
                 </a>
               </p>
 
-              <p class="text-[#8f8f8f] text-sm w-full">
-                Shipped Laravel + Vue apps, improved performance, and handled
-                AWS deployments end-to-end.
+              <p class="text-muted-foreground text-sm w-full">
+                Shipped Laravel and Vue applications, improved performance, and
+                handled AWS deployments end-to-end for client and business
+                systems.
               </p>
             </div>
           </div>

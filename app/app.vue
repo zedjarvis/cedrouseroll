@@ -3,18 +3,18 @@ import { Toaster } from "@/components/ui/sonner";
 import "vue-sonner/style.css";
 
 const colorMode = useColorMode();
+const themeColor = computed(() =>
+  colorMode.value === "dark" ? "#0a0a0a" : "#f6f2e9",
+);
 
-// Prefer dark immediately (avoid client-only flicker)
-if (colorMode.preference !== "dark") {
-  colorMode.preference = "dark";
-}
-
-// Ensure background/text classes exist at the root for consistent paint
-useHead({
-  htmlAttrs: {
-    class: "dark", // keeps first paint aligned with your design
-  },
-});
+useHead(() => ({
+  meta: [
+    {
+      name: "theme-color",
+      content: themeColor.value,
+    },
+  ],
+}));
 </script>
 
 <template>

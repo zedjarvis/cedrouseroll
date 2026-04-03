@@ -12,7 +12,7 @@ const tag = computed(() => props.as ?? "p");
   <component
     :is="tag"
     :id="id"
-    class="font-geist text-xs text-[#8f8f8f] opacity-60 uppercase tracking-wide"
+    class="font-geist text-xs text-muted-foreground opacity-80 uppercase tracking-wide"
   >
     {{ text }}
   </component>

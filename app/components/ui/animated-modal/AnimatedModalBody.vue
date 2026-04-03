@@ -34,6 +34,7 @@ if (!modal) {
 type PanelRef = HTMLElement | { $el?: HTMLElement } | null;
 const panelRef = ref<PanelRef>(null);
 const previousActive = ref<HTMLElement | null>(null);
+const reduceMotion = ref(false);
 
 const getPanelEl = (): HTMLElement | null => {
   const raw = panelRef.value;
@@ -128,6 +129,8 @@ watch(
 );
 
 if (import.meta.client) {
+  reduceMotion.value =
+    window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
   useEventListener(document, "mousedown", (e) => {
     if (!modal.open.value) return;
     closeIfOutside(e);
@@ -154,27 +157,44 @@ onBeforeUnmount(() => {
         as="div"
         :style="{ zIndex: props.zIndex }"
         class="fixed inset-0 z-50 flex h-full w-full items-center justify-center [perspective:800px] [transform-style:preserve-3d]"
-        :animate="{
-          backdropFilter: 'blur(10px)',
-        }"
-        :exit="{
-          opacity: 0,
-          backdropFilter: 'blur(0px)',
-        }"
+        :initial="reduceMotion ? { opacity: 0 } : undefined"
+        :animate="
+          reduceMotion
+            ? { opacity: 1 }
+            : {
+                backdropFilter: 'blur(10px)',
+              }
+        "
+        :exit="
+          reduceMotion
+            ? { opacity: 0 }
+            : {
+                opacity: 0,
+                backdropFilter: 'blur(0px)',
+              }
+        "
       >
         <Motion
           as="div"
           class="fixed inset-0 h-full w-full bg-black/50"
           :class="props.overlayClass"
           :initial="{ opacity: 0 }"
-          :animate="{
-            opacity: 1,
-            backdropFilter: 'blur(10px)',
-          }"
-          :exit="{
-            opacity: 0,
-            backdropFilter: 'blur(0px)',
-          }"
+          :animate="
+            reduceMotion
+              ? { opacity: 1 }
+              : {
+                  opacity: 1,
+                  backdropFilter: 'blur(10px)',
+                }
+          "
+          :exit="
+            reduceMotion
+              ? { opacity: 0 }
+              : {
+                  opacity: 0,
+                  backdropFilter: 'blur(0px)',
+                }
+          "
         />
 
         <Motion
@@ -183,36 +203,52 @@ onBeforeUnmount(() => {
           role="dialog"
           aria-modal="true"
           tabindex="-1"
-          class="relative z-50 flex max-h-[85vh] w-[min(720px,calc(100vw-32px))] flex-col overflow-hidden rounded-2xl border border-transparent bg-white dark:border-neutral-800 dark:bg-neutral-950"
+          class="relative z-50 flex max-h-[85vh] w-[min(720px,calc(100vw-32px))] flex-col overflow-hidden overscroll-contain rounded-2xl border border-transparent bg-white dark:border-neutral-800 dark:bg-neutral-950"
           :class="[props.class]"
-          :initial="{
-            opacity: 0,
-            scale: 0.5,
-            rotateX: 80,
-            y: 40,
-          }"
-          :animate="{
-            opacity: 1,
-            scale: 1,
-            rotateX: 0,
-            y: 0,
-          }"
-          :exit="{
-            opacity: 0,
-            scale: 0.8,
-            rotateX: 10,
-          }"
-          :transition="{
-            opacity: { duration: 0.2, ease: 'easeOut' },
-            scale: { type: 'spring', stiffness: 260, damping: 15 },
-            rotateX: { type: 'spring', stiffness: 260, damping: 15 },
-            y: { type: 'spring', stiffness: 260, damping: 15 },
-          }"
+          :initial="
+            reduceMotion
+              ? { opacity: 0 }
+              : {
+                  opacity: 0,
+                  scale: 0.5,
+                  rotateX: 80,
+                  y: 40,
+                }
+          "
+          :animate="
+            reduceMotion
+              ? { opacity: 1 }
+              : {
+                  opacity: 1,
+                  scale: 1,
+                  rotateX: 0,
+                  y: 0,
+                }
+          "
+          :exit="
+            reduceMotion
+              ? { opacity: 0 }
+              : {
+                  opacity: 0,
+                  scale: 0.8,
+                  rotateX: 10,
+                }
+          "
+          :transition="
+            reduceMotion
+              ? { duration: 0.12, ease: 'easeOut' }
+              : {
+                  opacity: { duration: 0.2, ease: 'easeOut' },
+                  scale: { type: 'spring', stiffness: 260, damping: 15 },
+                  rotateX: { type: 'spring', stiffness: 260, damping: 15 },
+                  y: { type: 'spring', stiffness: 260, damping: 15 },
+                }
+          "
         >
           <button
             v-if="props.showClose"
             type="button"
-            class="group absolute top-4 right-4"
+            class="group absolute top-4 right-4 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             aria-label="Close"
             @click="modal.closeModal()"
           >

@@ -4,8 +4,7 @@ import { useWeather } from "~/composables/useWeather";
 
 const { weather, loading } = useWeather();
 
-// Compute once (stable, no rerender cost)
-const year = new Date().getFullYear();
+const year = useState("footer-year", () => new Date().getFullYear());
 
 // Reduced motion (avoid pulsing icons for users who prefer reduced motion)
 const reduceMotion = ref(false);

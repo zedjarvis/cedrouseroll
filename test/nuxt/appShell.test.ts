@@ -11,7 +11,7 @@ const {
   useSeoMetaSpy,
   computeFromElSpy,
 } = vi.hoisted(() => ({
-  colorModeState: { preference: "light" },
+  colorModeState: { preference: "system", value: "light" },
   useHeadSpy: vi.fn(),
   useSeoMetaSpy: vi.fn(),
   computeFromElSpy: vi.fn(),
@@ -48,7 +48,8 @@ const LinkStub = defineComponent({
 
 describe("app shell and pages", () => {
   beforeEach(() => {
-    colorModeState.preference = "light";
+    colorModeState.preference = "system";
+    colorModeState.value = "light";
     useHeadSpy.mockReset();
     useSeoMetaSpy.mockReset();
     computeFromElSpy.mockReset();
@@ -59,7 +60,7 @@ describe("app shell and pages", () => {
     vi.unstubAllGlobals();
   });
 
-  it("forces dark mode at the app root and sets root html class", async () => {
+  it("respects system mode at the app root and syncs theme-color", async () => {
     const wrapper = await mountSuspended(AppRoot, {
       global: {
         stubs: {
@@ -72,11 +73,12 @@ describe("app shell and pages", () => {
       },
     });
 
-    expect(colorModeState.preference).toBe("dark");
-    expect(useHeadSpy).toHaveBeenCalledWith({
-      htmlAttrs: {
-        class: "dark",
-      },
+    expect(colorModeState.preference).toBe("system");
+    expect(useHeadSpy).toHaveBeenCalledTimes(1);
+    const headConfig = useHeadSpy.mock.calls[0]?.[0];
+    expect(typeof headConfig).toBe("function");
+    expect(headConfig()).toEqual({
+      meta: [{ name: "theme-color", content: "#f6f2e9" }],
     });
     expect(wrapper.classes()).toContain("min-h-screen");
   });

@@ -173,7 +173,7 @@ onMounted(async () => {
         <div class="flex flex-col w-full">
           <NuxtLink
             to="/writing/hello-world"
-            class="hover:bg-[#141414] transition-all ease-out duration-200 flex justify-center py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            class="flex justify-center py-2 transition-all duration-200 ease-out hover:bg-accent/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             aria-label="Hello World, estimated 2 minute read"
           >
             <div class="w-full flex items-center justify-between">

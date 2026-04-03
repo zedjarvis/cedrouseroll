@@ -50,7 +50,7 @@ const posts: Post[] = [
         <li v-for="post in posts" :key="post.id">
           <NuxtLink
             :to="post.to"
-            class="hover:bg-[#141414] transition-all ease-out duration-200 flex justify-center py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            class="flex justify-center py-2 transition-all duration-200 ease-out hover:bg-accent/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/30 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             :aria-label="`${post.title}, ${post.minutes} minute read`"
           >
             <div
