@@ -3,11 +3,11 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import IndexHeader from "~/components/IndexHeader.vue";
 
 const { colorModeState, colorModeGlobalState } = vi.hoisted(() => ({
-  colorModeState: { preference: "system", value: "light" },
+  colorModeState: { preference: "dark", value: "dark" },
   colorModeGlobalState: {
-    preference: "system",
-    value: "light",
-    getColorScheme: () => "light",
+    preference: "dark",
+    value: "dark",
+    getColorScheme: () => "dark",
     addColorScheme: vi.fn(),
     removeColorScheme: vi.fn(),
   },
@@ -19,10 +19,10 @@ mockNuxtImport("useColorMode", () => {
 
 describe("IndexHeader", () => {
   beforeEach(() => {
-    colorModeState.preference = "system";
-    colorModeState.value = "light";
-    colorModeGlobalState.preference = "system";
-    colorModeGlobalState.value = "light";
+    colorModeState.preference = "dark";
+    colorModeState.value = "dark";
+    colorModeGlobalState.preference = "dark";
+    colorModeGlobalState.value = "dark";
     vi.stubGlobal("__NUXT_COLOR_MODE__", colorModeGlobalState);
     vi.useFakeTimers();
     vi.setSystemTime(new Date("2026-03-07T09:15:30.000Z"));
@@ -43,7 +43,7 @@ describe("IndexHeader", () => {
     expect(setIntervalSpy).toHaveBeenCalledTimes(1);
     expect(wrapper.text()).toContain("GMT+3");
     expect(wrapper.get('button[type="button"]').attributes("aria-label")).toContain(
-      "Current theme: light",
+      "Current theme: dark",
     );
 
     wrapper.unmount();
@@ -74,11 +74,11 @@ describe("IndexHeader", () => {
     wrapper.unmount();
   });
 
-  it("toggles from system-resolved light to dark", async () => {
+  it("toggles from dark to light", async () => {
     const wrapper = await mountSuspended(IndexHeader);
 
     await wrapper.get('button[type="button"]').trigger("click");
 
-    expect(colorModeState.preference).toBe("dark");
+    expect(colorModeState.preference).toBe("light");
   });
 });

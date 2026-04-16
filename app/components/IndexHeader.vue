@@ -4,10 +4,6 @@ import { Clock, Moon, Sun } from "lucide-vue-next";
 const timeText = ref("");
 const colorMode = useColorMode();
 
-const currentThemeIcon = computed(() =>
-  colorMode.value === "dark" ? Moon : Sun,
-);
-
 const currentThemeLabel = computed(() =>
   colorMode.value === "dark" ? "dark" : "light",
 );
@@ -96,7 +92,12 @@ onBeforeUnmount(() => {
         :aria-label="`Current theme: ${currentThemeLabel}. Toggle theme.`"
         @click="toggleTheme"
       >
-        <component :is="currentThemeIcon" :size="16" aria-hidden="true" />
+        <Moon
+          v-if="currentThemeLabel === 'dark'"
+          :size="16"
+          aria-hidden="true"
+        />
+        <Sun v-else :size="16" aria-hidden="true" />
       </button>
     </div>
   </div>
